@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchCount } from './counterAPI';
-
+import firebase from 'firebase'
+import {auth} from "../../firebase/firebase"
+import { selectUserId } from '../login/userSlice';
 const initialState = {
   value: 0,
   status: 'idle',
+  count: 0
 };
-
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -37,7 +39,8 @@ export const counterSlice = createSlice({
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     incrementByAmount: (state, action) => {
-      state.value += action.payload;
+      state.value += action.payload.value;
+      state.count += 1
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,

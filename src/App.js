@@ -4,6 +4,7 @@ import {auth, provider} from './firebase/firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {setActiveUser, setUserLogOutState, selectUserName, selectUserEmail} from './features/login/userSlice';
 import Main from "./features/main/Main"
+import {Counter} from "./features/counter/Counter"
 
 function App() {
   const dispatch = useDispatch();
@@ -14,7 +15,8 @@ function App() {
     auth.signInWithPopup(provider).then((result)=>{
       dispatch(setActiveUser({
         userName: result.user.displayName,
-        userEmail: result.user.email
+        userEmail: result.user.email,
+        userId: result.user.uid
       }))
     })
   }

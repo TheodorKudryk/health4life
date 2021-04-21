@@ -19,7 +19,7 @@
     padding-right: 16px;
     margin-top: 2px;
     font-family: Impact, Courier, Fantasy;
-    color:#FFEFD5;
+    color:#ffffff;
   }
   .button {
     appearance: none;
@@ -76,6 +76,22 @@
     width: 0%;
     opacity: 1;
     transition: 0s;
+  }
+  .stepText{
+    font-size: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 2px;
+    font-family: Impact, Courier, Fantasy;
+    color:#ffffff;
+  }
+  .stepValue{
+    font-size: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 2px;
+    font-family: Impact, Courier, Fantasy;
+    color:#6495ED;
   }
   .steps{
     composes: asyncButton;
