@@ -5,19 +5,25 @@ import {
     increment,
     selectCount,
   } from './mainSlice';
-  import { selectUserName } from '../login/userSlice';
+  import { selectUserName, selectUserId } from '../login/userSlice';
+  import firebase from 'firebase';
+var myVar;
 
 const Main = () => {
+    clearTimeout(myVar);
     const count = useSelector(selectCount);
-    const uName = useSelector(selectUserName);
     const dispatch = useDispatch();
+     const uName = useSelector(selectUserName);
+     const uid = useSelector(selectUserId);
     const split = uName.split(" ");
-    const name = split[0];
-    setInterval(() => {dispatch(increment())}, 5000)
+    const name = split[0]; 
+    var current = new Date();
+    firebase.database().ref('users/' + uid).push({steps:count, timestamp:current.toLocaleString()});
+    myVar = setTimeout(() => {dispatch(increment())}, 1000)
     
     return(
         <div className={styles.body}>
-            <div className={styles.value}>   
+             <div className={styles.value}>   
             Welcome back, {name.charAt(0).toUpperCase()}{name.slice(1)}! 
             </div>
             <div className={styles.stepText}>Today's steps</div>

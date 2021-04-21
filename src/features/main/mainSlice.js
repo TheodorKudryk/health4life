@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchCount } from '../counter/counterAPI';
-import firebase from 'firebase'
-import {auth} from "../../firebase/firebase"
-import { selectUserId } from '../login/userSlice';
 const initialState = {
   value: 0,
   status: 'idle',
