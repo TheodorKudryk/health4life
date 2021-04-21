@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    create, edit, toggleComplete, remove
+    create, toggleComplete, remove
 } from './friendsSlice';
 
 const Friends = () => {

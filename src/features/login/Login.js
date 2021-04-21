@@ -1,9 +1,9 @@
 import {
     setActiveUser,
-    setUserLogOutState,
     selectUserName,
-    selectUserEmail
 } from './userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {auth, provider} from '../../firebase/firebase';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -17,6 +17,8 @@ export function Login() {
             userEmail: result.user.email,
             userId: result.user.uid
         }))
+        window.location.hash="main";
+        console.log("handlesignin")
         })
     }
     return (

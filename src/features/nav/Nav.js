@@ -1,12 +1,15 @@
-import styles from './navBar.module.css';
-import {auth} from './firebase/firebase';
+import './nav.css';
+import {auth} from '../.././firebase/firebase';
+import {useDispatch} from 'react-redux';
+import {setUserLogOutState} from '../login/userSlice';
 
-export function NavBar() {
+export function Nav() {
     const navToProfile = ()=> window.location.hash="profile";
     const navToLogs = ()=> window.location.hash="logs";
     const navToMain = ()=> window.location.hash="main";
     const navToFriends = ()=> window.location.hash="friends";
 
+    const dispatch = useDispatch();
     const handleSignOut = () =>{
         window.location.hash="login";
         auth.signOut().then(()=>{
@@ -23,4 +26,4 @@ export function NavBar() {
             <button onClick={()=>handleSignOut()}>log out</button>
         </div>
     )
-}
+};
