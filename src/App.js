@@ -3,47 +3,32 @@ import './App.css';
 import {auth, provider} from './firebase/firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {setActiveUser, setUserLogOutState, selectUserName, selectUserEmail} from './features/login/userSlice';
-import Main from "./features/main/Main"
-import {Counter} from "./features/counter/Counter"
+import Main from "./features/main/Main";
+import {Login} from "./features/login/Login";
+import {NavBar} from "./features/navBar/Navbar";
+import Friends from "./features/friends/Friends";
+import Show from "./app/show";
 
-function App() {
-  const dispatch = useDispatch();
+function defaultRoute(userName){
+  if (!userName)
+    window.location.hash="#login";
+  else if(! ["#profile", "#logs", "#main", "#friends"].find(knownRoute=>knownRoute===window.location.hash))
+    window.location.hash="#main";
+}
+
+export default function App() {
   const userName = useSelector(selectUserName);
-  //const userEmail = useSelector(selectUserEmail);
-
-  const handleSignIn = () =>{
-    auth.signInWithPopup(provider).then((result)=>{
-      dispatch(setActiveUser({
-        userName: result.user.displayName,
-        userEmail: result.user.email,
-        userId: result.user.uid
-      }))
-    })
-  }
-
-  const handleSignOut = () =>{
-    console.log("hey")
-    auth.signOut().then(()=>{
-      dispatch(setUserLogOutState())
-    }).catch((err)=>alert(err.message))
-  }
+  defaultRoute(userName);
+  window.addEventListener("hashchange", ()=> defaultRoute());
 
   return (
     <div className="App">
-      <header className = "App-header">
-          {
-            userName ? (<div>
-              <Main/>
-
-<button onClick = {handleSignOut}>Sign Out</button>
-            </div>
-            ):(
-              <button onClick = {handleSignIn}>Sign In</button>
-            )
-          }
-      </header>
+      <Show hash="#login"><Login/></Show>
+      <Show hash="#nav"><NavBar/></Show>
+      <Show hash="#profile">Profile</Show>
+      <Show hash="#main"><Main/></Show>
+      <Show hash="#friends"><Friends/></Show>
+      <Show hash="#logs">Logs</Show>
     </div>
-  );
-}
-
-export default App;
+  )
+};

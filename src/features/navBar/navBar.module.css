@@ -1,0 +1,12 @@
+.navBar {
+    background: rgb(66, 184, 138);
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  
+  .navBar button {
+      background-color: aliceblue;
+  }
