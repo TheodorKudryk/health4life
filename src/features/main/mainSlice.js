@@ -30,11 +30,14 @@ export const mainSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.value += 1;
+    },
+    end: (state) => {
+      state.value = 0;
     }
   }
 });
 
-export const { increment } = mainSlice.actions;
+export const { increment, end} = mainSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

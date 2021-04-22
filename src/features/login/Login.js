@@ -4,6 +4,7 @@ import {
 } from './userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
+import styles from './Login.module.css';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -21,6 +22,6 @@ export function Login() {
         })
     }
     return (
-        <button onClick = {handleSignIn}>Sign In</button>
+            <button className={styles.login} onClick = {handleSignIn}>Sign In</button>
     )
 }
