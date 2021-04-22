@@ -18,7 +18,6 @@ export function Login() {
             userId: result.user.uid
         }))
         window.location.hash="main";
-        console.log("handlesignin")
         })
     }
     return (

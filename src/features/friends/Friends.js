@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     create, toggleComplete, remove
 } from './friendsSlice';
+import "./friends.css"
 
 const Friends = () => {
     const [inputText, setInputText] = useState('');
@@ -26,15 +27,15 @@ const Friends = () => {
     };
 
     return (
-        <div>
+        <div className="friends">
            <form onSubmit={handleSubmit}>
             <input onChange={e=>{setInputText(e.target.value)}} value={inputText} />
-            <button type='submit'>Create new</button>
+            <button type='submit'>Search</button>
            </form>
            {friends.map(friend => (
                <div key={friend.id}>
                    {friend.description}
-                   {friend.isComplete ? 'DONE' : ''}
+                   {friend.isComplete ? '  ACTIVE  ' : ''}
                    <button onClick={handleRemove(friend.id)}>Remove</button>
                    <button onClick={handleToggle(friend.id)}>Toggle</button>
                </div>
