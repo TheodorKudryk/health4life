@@ -2,7 +2,7 @@ import './nav.css';
 import {auth} from '../.././firebase/firebase';
 import {useDispatch} from 'react-redux';
 import {setUserLogOutState} from '../login/userSlice';
-import {end} from '../main/mainSlice';
+//import {end} from '../main/mainSlice';
 export function Nav() {
     const navToProfile = ()=> window.location.hash="profile";
     const navToLogs = ()=> window.location.hash="logs";
@@ -12,7 +12,7 @@ export function Nav() {
     const dispatch = useDispatch();
     const handleSignOut = () =>{
         window.location.hash="login";
-        dispatch(end());
+        //dispatch(end());
         auth.signOut().then(()=>{
             dispatch(setUserLogOutState())
         }).catch((err)=>alert(err.message))

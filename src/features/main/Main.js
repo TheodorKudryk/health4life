@@ -3,24 +3,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import styles from './Main.module.css';
 import {
     increment,
-    selectCount,
+    selectValue,
   } from './mainSlice';
   import { selectUserName} from '../login/userSlice';
   import { selectUserId} from '../login/userSlice'; 
   import firebase from 'firebase';
 var myVar;
-
+var newValue;
 const Main = () => {
     clearTimeout(myVar);
-    const count = useSelector(selectCount);
+    console.log(selectValue);
+    const uName = useSelector(selectUserName);
+    const uid = useSelector(selectUserId);
+    const count = useSelector(selectValue);
     const dispatch = useDispatch();
-     const uName = useSelector(selectUserName);
-     const uid = useSelector(selectUserId);
-    const split = uName.split(" ");
-    const name = split[0]; 
-    var current = new Date();
-    firebase.database().ref('users/' + uid).push({steps:count, timestamp:current.toLocaleString()});
-    myVar = setTimeout(() => {dispatch(increment(uid))}, 1000)
+   const split = uName.split(" ");
+   const name = split[0]; 
+    var current = new Date().toLocaleDateString('zh-Hans-CN');
+    firebase.database().ref().child("users/" + uid + "/" + current).once('value',function(snap){
+        if (snap){
+          newValue= snap.val();
+        }
+      }).then(()=> {myVar = setTimeout(() => {dispatch(increment(newValue))}, 1000)});
     
     return(
         <div className={styles.body}>
@@ -33,7 +37,7 @@ const Main = () => {
                 <div><button 
             className={styles.steps}
             aria-label="Increment value"
-            onClick={() => dispatch(increment())}
+           
             > Steps</button></div>
             <button 
             className={styles.pulse}
