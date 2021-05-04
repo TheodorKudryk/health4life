@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "build",
+    "public": "health4life",
     "ignore": [
       "firebase.json",
       "**/.*",

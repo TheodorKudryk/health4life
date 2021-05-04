@@ -5,25 +5,28 @@ import {
     increment,
     selectValue,
   } from './mainSlice';
-  import { selectUserName, selectUserId } from '../login/userSlice';
+  import { selectUserName} from '../login/userSlice';
+  import { selectUserId} from '../login/userSlice'; 
   import firebase from 'firebase';
 var myVar;
 var newValue;
 const Main = () => {
     clearTimeout(myVar);
+    const count = useSelector(selectValue);
     console.log(selectValue);
     const uName = useSelector(selectUserName);
     const uid = useSelector(selectUserId);
-    const count = useSelector(selectValue);
     const dispatch = useDispatch();
    const split = uName.split(" ");
    const name = split[0]; 
     var current = new Date().toLocaleDateString('zh-Hans-CN');
-    firebase.database().ref().child("users/" + uid + "/" + current).once('value',function(snap){
-        if (snap){
-          newValue= snap.val();
-        }
-      }).then(()=> {myVar = setTimeout(() => {dispatch(increment(newValue))}, 1000)});
+    if(count != 0){
+        firebase.database().ref().child("users/" + uid + "/" + current).once('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+          }).then(()=> {myVar = setTimeout(() => {dispatch(increment(newValue, myVar))}, 1000)});
+    }
     
     return(
         <div className={styles.body}>

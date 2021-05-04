@@ -12,7 +12,7 @@ import Show from "./app/show";
 function defaultRoute(userName){
   //should check if user is logged in and if not only be allowed on #login.
   if(! ["#profile", "#logs", "#main", "#friends", "#login"].find(knownRoute=>knownRoute===window.location.hash))
-    window.location.hash="#main";
+    window.location.hash="#login";
 }
 
 export default function App() {

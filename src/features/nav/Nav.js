@@ -2,11 +2,7 @@ import './nav.css';
 import {auth} from '../.././firebase/firebase';
 import {useDispatch} from 'react-redux';
 import {setUserLogOutState} from '../login/userSlice';
-<<<<<<< HEAD
-//import {end} from '../main/mainSlice';
-=======
-
->>>>>>> parent of f50b2a0 (Design and hash change)
+import {end} from '../main/mainSlice';
 export function Nav() {
     const navToProfile = ()=> window.location.hash="profile";
     const navToLogs = ()=> window.location.hash="logs";
@@ -16,10 +12,7 @@ export function Nav() {
     const dispatch = useDispatch();
     const handleSignOut = () =>{
         window.location.hash="login";
-<<<<<<< HEAD
-        //dispatch(end());
-=======
->>>>>>> parent of f50b2a0 (Design and hash change)
+        dispatch(end());
         auth.signOut().then(()=>{
             dispatch(setUserLogOutState())
         }).catch((err)=>alert(err.message))
@@ -31,7 +24,7 @@ export function Nav() {
             <button onClick={()=>navToLogs()}>logs</button>
             <button onClick={()=>navToMain()}>main</button>
             <button onClick={()=>navToFriends()}>friends</button>
-            <button onClick={()=>handleSignOut()}>log out</button>
+            <button onClick={()=>handleSignOut() }>log out</button>
         </div>
     )
 };
