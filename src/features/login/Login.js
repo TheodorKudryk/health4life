@@ -7,8 +7,11 @@ import {
   } from '../main/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
+<<<<<<< HEAD
 import styles from './Login.module.css';
 import firebase from 'firebase';
+=======
+>>>>>>> parent of f50b2a0 (Design and hash change)
 
 var current = new Date().toLocaleDateString('zh-Hans-CN');
 export function Login() {
@@ -32,6 +35,6 @@ export function Login() {
         })
     }
     return (
-            <button className={styles.login} onClick = {handleSignIn}>Sign In</button>
+        <button onClick = {handleSignIn}>Sign In</button>
     )
 }

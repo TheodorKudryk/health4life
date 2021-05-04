@@ -5,8 +5,7 @@ import {
     increment,
     selectValue,
   } from './mainSlice';
-  import { selectUserName} from '../login/userSlice';
-  import { selectUserId} from '../login/userSlice'; 
+  import { selectUserName, selectUserId } from '../login/userSlice';
   import firebase from 'firebase';
 var myVar;
 var newValue;
