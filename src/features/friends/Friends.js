@@ -4,11 +4,13 @@ import {
     create, toggleComplete, remove
 } from './friendsSlice';
 import "./friends.css"
+import { setUserLogOutState } from '../login/userSlice';
 
 const Friends = () => {
     const [inputText, setInputText] = useState('');
     const dispatch = useDispatch();
     const friends = useSelector(state => state.friends);
+    const user = useSelector(state => state.user);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -40,6 +42,11 @@ const Friends = () => {
                    <button onClick={handleToggle(friend.id)}>Toggle</button>
                </div>
            ))}
+            <div key={user.userId}>
+                {user.userName}<br/>
+                {user.userEmail}<br/>
+                {user.userId}
+            </div>
         </div>
     )
 };
