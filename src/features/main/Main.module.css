@@ -93,6 +93,21 @@
     font-family: Impact, Courier, Fantasy;
     color:#6495ED;
   }
+  .pulseValue{
+    font-size: 50px;
+    padding-left: 40px;
+    padding-right: px;
+    margin-top: 2px;
+    font-family: Impact, Courier, Fantasy;
+    color:#DC143C;}
+    .calorieValue{
+      font-size: 50px;
+      padding-left: 30px;
+      padding-right: 40px;
+      margin-top: 2px;
+      font-family: Impact, Courier, Fantasy;
+      color:#80ff00af;
+    }
   .steps{
     composes: asyncButton;
     color:#6495ED;
