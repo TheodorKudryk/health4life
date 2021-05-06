@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Main.module.css';
 import {
-    increment,
+    selectPulse,
     selectValue,
   } from './mainSlice';
   import { selectUserName} from '../login/userSlice';
@@ -15,18 +15,11 @@ const Main = () => {
     const count = useSelector(selectValue);
     console.log(selectValue);
     const uName = useSelector(selectUserName);
-    const uid = useSelector(selectUserId);
+    const pulse = useSelector(selectPulse);
     const dispatch = useDispatch();
    const split = uName.split(" ");
    const name = split[0]; 
-   console.log(uid);
-    var current = new Date().toLocaleDateString('zh-Hans-CN');
-    console.log(current);
-        firebase.database().ref().child("users/" + uid + "/steps/" + current).once('value',function(snap){
-            if (snap){
-              newValue= snap.val();
-            }
-          }).then(()=> {myVar = setTimeout(() => {dispatch(increment(newValue))}, 5000)});  
+          //()=> {myVar = setTimeout(() => {dispatch(increment(newValue))}, 5000)}
     
     return(
         <div className={styles.body}>
@@ -43,7 +36,7 @@ const Main = () => {
             > Steps</button></div>  
             <div>
               <p>
-                <span className={styles.pulseValue}>170</span>
+                <span className={styles.pulseValue}>{pulse}</span>
                 <span className={styles.calorieValue}> 2300</span>
               </p>
             </div>

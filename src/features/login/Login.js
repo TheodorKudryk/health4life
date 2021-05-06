@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import styles from './Login.css';
 import pic from './app.png'
-import { start } from '../main/mainSlice';
+import { steps, pulse } from '../main/mainSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -23,16 +23,33 @@ export function Login() {
         }))
         var check = false;
         var current = new Date().getDay();
-        firebase.database().ref().child("users/" + result.user.uid + "/steps").once("value")
-        .then(function(snapshot) {
-          check = snapshot.hasChild(current.toString());
-        });
+        var newValue;
         const datum = new Date().toLocaleDateString('zh-Hans-CN');
-        if(!check){
-          firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
-        }
-        dispatch(start())
+        firebase.database().ref().child("users/" + result.user.uid).once("value")
+        .then(function(snapshot) {
+          check = snapshot.hasChildren();
+        }).then(
+            ()=> {if(!check){
+                firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
+              }
+            console.log(check);}
+        );
+        console.log(result.user.uid);
+        console.log(datum);
+        firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(pulse(newValue));
+          })
+        firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(steps(newValue));
         window.location.hash="main";
+          })
         })
     }
     return (

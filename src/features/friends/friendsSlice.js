@@ -8,7 +8,7 @@ export const friendsSlice = createSlice({
             const {payload} = action;
             
             state.push({
-                id: state.length+1,
+                id: payload,
                 description: payload,
                 isComplete: false
             });
