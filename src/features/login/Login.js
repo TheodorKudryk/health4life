@@ -8,6 +8,7 @@ import {auth, provider} from '../../firebase/firebase';
 import styles from './Login.css';
 import pic from './app.png'
 import { steps, pulse } from '../main/mainSlice';
+import { addAge } from '../profile/profileSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -32,11 +33,19 @@ export function Login() {
             ()=> {if(!check){
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
               }
             console.log(check);}
         );
         console.log(result.user.uid);
         console.log(datum);
+        firebase.database().ref().child("users/" + result.user.uid  + "/age/").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+              console.log("age exists");
+            }
+            dispatch(addAge(newValue));
+          })
         firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
