@@ -1,20 +1,17 @@
 import firebase from 'firebase';
 import {
-    setActiveUser,
-    selectUserName,
-} from './userSlice';
-import {useDispatch, useSelector} from 'react-redux';
+    setActiveUser
+} from './loginSlice';
+import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
-import styles from './Login.css';
+import './Login.css';
 import pic from './app.png'
 import { steps, pulse } from '../main/mainSlice';
 import { addAge, addHeight, addSex, addActivityLevel, addGoal } from '../profile/profileSlice';
 
 export function Login() {
     const dispatch = useDispatch();
-    const userName = useSelector(selectUserName);
-    //const userEmail = useSelector(selectUserEmail);
-
+    let firstLogin = false;
     const handleSignIn = () =>{
         auth.signInWithPopup(provider).then((result)=>{
         dispatch(setActiveUser({
@@ -23,7 +20,6 @@ export function Login() {
             userId: result.user.uid
         }))
         var check = false;
-        var current = new Date().getDay();
         var newValue;
         const datum = new Date().toLocaleDateString('zh-Hans-CN');
         firebase.database().ref().child("users/" + result.user.uid).once("value")
@@ -31,6 +27,8 @@ export function Login() {
           check = snapshot.hasChildren();
         }).then(
             ()=> {if(!check){
+                firstLogin = true;
+                window.location.hash="popup";
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
@@ -86,7 +84,10 @@ export function Login() {
               newValue= snap.val();
             }
             dispatch(steps(newValue));
-        window.location.hash="main";
+        
+            if(!firstLogin){
+            window.location.hash="main";
+            }
           })
         })
     }

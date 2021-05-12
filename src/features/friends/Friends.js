@@ -5,7 +5,7 @@ import {
 } from './friendsSlice';
 import "./friends.css";
 import firebase from 'firebase';
-import {selectUserId} from '../login/userSlice';
+import {selectUserId} from '../login/loginSlice';
 
 const Friends = () => {
     const [inputText, setInputText] = useState('');

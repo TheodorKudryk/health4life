@@ -1,7 +1,7 @@
 import './nav.css';
-import {auth} from '../.././firebase/firebase';
+import {auth} from '../../firebase/firebase';
 import {useDispatch} from 'react-redux';
-import {setUserLogOutState} from '../login/userSlice';
+import {setUserLogOutState} from '../login/loginSlice';
 import {end} from '../main/mainSlice';
 export function Nav() {
     const navToProfile = ()=> window.location.hash="profile";

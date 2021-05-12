@@ -18,12 +18,18 @@ const mainSlice = createSlice({
       },
       end: (state) => {
         state.count = 0
-      }
+      },
+      
 }
   });
 
   export const {pulse, steps, end} = mainSlice.actions
 
+  
+
   export const selectValue = state => state.main.count
   export const selectPulse = state => state.main.pulse
+
+  
+  
   export default mainSlice.reducer
