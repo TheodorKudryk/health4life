@@ -1,0 +1,24 @@
+.navBar {
+    background: rgb(0, 0, 0);
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  
+  .navBar button {
+    appearance: none;
+    background: none;
+    font-size: 32px;
+    padding-left: 12px;
+    padding-right: 12px;
+    outline: none;
+    border: 2px solid transparent;
+    padding-bottom: 4px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    border-radius: 2px;
+    transition: all 0.15s;
+    font-family: Impact, Courier, Fantasy;
+  }

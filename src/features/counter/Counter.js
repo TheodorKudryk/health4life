@@ -9,14 +9,17 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import firebase from 'firebase'
+import {auth} from "../../firebase/firebase"
+import { selectUserId } from '../login/userSlice';
 
 export function Counter() {
   const count = useSelector(selectCount);
   const dispatch = useDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
-
+  const uid = useSelector(selectUserId);
+  firebase.database().ref('users/' + uid).push(count);
   const incrementValue = Number(incrementAmount) || 0;
-
   return (
     <div>
       <div className={styles.row}>
