@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Profile.module.css';
@@ -11,7 +10,7 @@ import {
     addGoal,
     selectAge
   } from './profileSlice';
-  import { selectUserName, selectUserId } from '../login/userSlice';
+  import { selectUserName, selectUserId } from '../login/loginSlice';
   import firebase from 'firebase';
 
 const Profile = () => {
@@ -25,7 +24,7 @@ const Profile = () => {
     const age = useSelector(selectAge);
     const uid = useSelector(selectUserId);
 
-    const datum = new Date().toLocaleDateString('zh-Hans-CN');
+    const date = new Date().toLocaleDateString('zh-Hans-CN');
 
     const submitAge = e => {
       e.preventDefault();
@@ -59,7 +58,7 @@ const Profile = () => {
 
     const submitWeight = e => {
       e.preventDefault();
-
+      firebase.database().ref('users/' + uid + "/weight/" + date).set(weightInputText);
       dispatch(addWeight(weightInputText));
     }
 
@@ -72,7 +71,7 @@ const Profile = () => {
         </div>
 
         <div class={styles.profileforms}>
-          Your weight: <form onSubmit={()=>dispatch(addWeight(weightInputText))}>
+          Your weight: <form onSubmit={submitWeight}>
                <input onChange={e =>setWeightInputText(e.target.value)} 
                value={weightInputText}/>
                <button type ="submit">Update</button><br/>
@@ -130,105 +129,4 @@ const Profile = () => {
     )
 };
 
-=======
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import styles from './Profile.module.css';
-import {
-    addWeight,
-    addAge,
-    addSex,
-    addHeight,
-    addActivityLevel,
-    addGoal,
-    selectAge
-  } from './profileSlice';
-  import { selectUserName, selectUserId } from '../login/loginSlice';
-  import firebase from 'firebase';
-
-const Profile = () => {
-    const [weightInputText, setWeightInputText] = useState('');
-    console.log("test");
-    const [ageInputText, setAgeInputText] = useState('');
-    const [sexInputText, setSexInputText] = useState('');
-    const [activityLevelInputText, setActivityLevelInputText] = useState('')
-    const [heightInputText, setHeightInputText] = useState('')
-    const [goalInputText, setGoalInputText] = useState('')
-    const dispatch = useDispatch();
-    const age = useSelector(selectAge);
-
-    const submitAge = e => {
-      e.preventDefault();
-
-      dispatch(addAge(ageInputText));
-    }
-
-    return(
-
-        <div class={styles.profile}>
-        <div class={styles.profileTitle}>
-            Profile
-            <p/>
-        </div>
-
-        <div class={styles.profileforms}>
-          <form onSubmit={()=>dispatch(addWeight(weightInputText))}>
-               <br/><input onChange={e =>setWeightInputText(e.target.value)} 
-               value={weightInputText}/>
-               <button type ="submit">Update</button><br/>
-           </form>
-           </div>
-
-        <div class={styles.profileforms}>
-        Your age: <form onSubmit={submitAge}>
-        <input onChange={e =>setAgeInputText(e.target.value)} 
-        value={ageInputText}/>
-        <button type ="submit">Update</button> 
-        </form>
-       </div>
-
-       <div class={styles.profileforms}>
-        Your height: <form onSubmit={()=>dispatch(addHeight(heightInputText))}>
-        <input onChange={e =>setHeightInputText(e.target.value)} 
-        value={heightInputText}/>
-        <button type ="submit">Update</button> 
-        </form>
-       </div>
-
-       <div class={styles.profileforms}>
-        Your sex: <form onSubmit={()=>dispatch(addSex(sexInputText))}>
-        <input onChange={e =>setSexInputText(e.target.value)} 
-        value={sexInputText}/>
-        <button type ="submit">Update</button> 
-        </form>
-        </div>
-
-        <div class={styles.profileforms}>
-               Set your activity level: <form onSubmit={()=>dispatch(addActivityLevel(activityLevelInputText))}>
-              <select onChange={e=>setActivityLevelInputText(e.target.value)}>
-                <option value="1">A little</option>
-                <option value="2">Medium</option>
-                <option value="3">A lot</option>
-                </select>
-                <button type="submit">Update</button>
-                </form>
-                </div>
-          
-                <div class={styles.profileforms}>
-                    Set your goal:
-                    <form onSubmit={()=>dispatch(addGoal(goalInputText))}>
-              <select onChange={e=>setGoalInputText(e.target.value)}>
-                <option value="1">Lose weight</option>
-                <option value="2">Stay at the same weight</option>
-                <option value="3">Gain weight</option>
-                </select>
-                <button type="submit">Update</button>
-                </form>
-                </div>
-
-    </div>
-    )
-};
-
->>>>>>> 5ed7e5ac87a76d232cc7053168884d4e32cba07b
 export default Profile;

@@ -73,11 +73,11 @@ export function Login() {
             }
             dispatch(addGoal(newValue));
           })
-        firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
+          firebase.database().ref().child("users/" + result.user.uid  + "/weight").on('value',function(snap){
             if (snap){
-              newValue= snap.val();
+              //get value here
             }
-            dispatch(pulse(newValue));
+            //dispatch here
           })
         firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
