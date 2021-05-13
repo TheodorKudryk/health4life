@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   count:0,
-  pulse:0
+  pulse:0,
+  calsBurned: 0,
+  calsEaten: 0
 }
 
 const mainSlice = createSlice({
@@ -19,16 +21,24 @@ const mainSlice = createSlice({
       end: (state) => {
         state.count = 0
       },
+      excerciseCalories: (state, action) =>{
+        state.calsBurned = action.payload
+      },
+      eatenCalories: (state, action) =>{
+        state.calsEaten = action.payload
+      }
       
 }
   });
 
-  export const {pulse, steps, end} = mainSlice.actions
+  export const {pulse, steps, end, excerciseCalories, eatenCalories} = mainSlice.actions
 
   
 
   export const selectValue = state => state.main.count
   export const selectPulse = state => state.main.pulse
+  export const selectEaten = state => state.main.calsEaten
+  export const selectExercise = state => state.main.calsBurned
 
   
   
