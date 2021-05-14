@@ -14,13 +14,11 @@ import {
   import {useDispatch} from 'react-redux'
   import firebase from 'firebase'
   
-var myVar;
-
 
 
 const Main = () => {
-    clearTimeout(myVar);
-    const count = useSelector(selectValue);
+
+    const count = useSelector(selectValue)
     const eatenCals = useSelector(selectEaten);
     const exerciseCals = useSelector(selectExercise);
     const uName = useSelector(selectUserName);
@@ -31,39 +29,10 @@ const Main = () => {
     const uid = useSelector(selectUserId);
     const datum = new Date().toLocaleDateString('zh-Hans-CN');
     let check = false;
-    
+    firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(count);
 
    const [calsInputText,setCalsInputText] = useState('');
    const [eatenCalsInputText,setEatenCalsInputText] = useState('');
-
-   firebase.database().ref().child("users/" + uid + "/calories/" + datum).once("value")
-        .then(function(snapshot) {
-          check = snapshot.hasChildren();
-        }).then(
-            ()=> {if(!check){
-                
-                firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedExercise").set(0);
-                firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/intake").set(0);
-                firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(0);
-                
-                
-              }
-              else{
-                firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/intake").once("value")
-                .then(function(snapshot) {
-                    dispatch(eatenCalories(snapshot.val()))
-                }).then(
-                    firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedExercise").once("value")
-                    .then(function(snapshot) {
-                        dispatch(excerciseCalories(snapshot.val()));
-                    })
-                )
-                
-                firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(parseFloat(count)*0.04);
-              }
-            console.log(check);}
-        );
-
    
    const addCalories = (e)=>{
         e.preventDefault();
@@ -102,15 +71,15 @@ const Main = () => {
               <p>
                 <span className={styles.pulseValue}>{pulse}</span>
                 
-                <span className={styles.calorieValue}>{eatenCals - (exerciseCals + (parseFloat(count)*0.04)) > 0 ?
-                    eatenCals - (exerciseCals + (parseFloat(count)*0.04))
+                <span className={styles.calorieValue}>{eatenCals - (exerciseCals + ((count)*0.04)) > 0 ?
+                    eatenCals - (exerciseCals + ((count)*0.04))
                     :
-                    (eatenCals - (exerciseCals + (parseFloat(count)*0.04)))*-1
+                    (eatenCals - (exerciseCals + ((count)*0.04)))*-1
                 }</span>
               </p>
             </div>
             <div>
-                {eatenCals - (exerciseCals + (parseFloat(count)*0.04)) > 0 ?  
+                {eatenCals - (exerciseCals + ((count)*0.04)) > 0 ?  
                 <p
                     >
                     <button 

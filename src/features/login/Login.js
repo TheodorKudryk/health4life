@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 
 export function Login() {
@@ -31,10 +31,37 @@ export function Login() {
                 window.location.hash="popup";
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
-                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/intake").set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedSteps").set(0);
               }
             console.log(check);}
         );
+        firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).once("value")
+        .then(function(snapshot) {
+          check = snapshot.hasChild("burnedExercise");
+        }).then(
+            ()=> {if(!check){
+                firstLogin = true;
+                
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
+              }
+            console.log(check);}
+        );
+
+        firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).once("value")
+        .then(function(snapshot) {
+          check = snapshot.hasChild("intake");
+        }).then(
+            ()=> {if(!check){
+                firstLogin = true;
+                
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/intake").set(0);
+              }
+            console.log(check);}
+        );
+
         console.log(result.user.uid);
         console.log(datum);
         firebase.database().ref().child("users/" + result.user.uid  + "/age/").on('value',function(snap){
@@ -44,22 +71,43 @@ export function Login() {
             }
             dispatch(addAge(newValue));
           })
-        firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
+          firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
+            }
+            if(newValue == null){
+              newValue=0;
             }
             dispatch(pulse(newValue));
           })
-        firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
+          firebase.database().ref().child("users/" + result.user.uid  + "/calories/" + datum + "/intake").on('value',function(snap){
             if (snap){
               newValue= snap.val();
             }
+            dispatch(eatenCalories(newValue));
+          })
+          firebase.database().ref().child("users/" + result.user.uid  + "/calories/" + datum + "/burnedExercise").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(excerciseCalories(newValue));
+          })
+          firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            if(newValue == null){
+              newValue=0;
+            }
             dispatch(steps(newValue));
-        
+            
             if(!firstLogin){
             window.location.hash="main";
             }
           })
+        
+          
+        
         })
     }
     return (
