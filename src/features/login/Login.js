@@ -7,11 +7,7 @@ import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
 import { steps, pulse } from '../main/mainSlice';
-<<<<<<< HEAD
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
-=======
-import { addAge } from '../profile/profileSlice';
->>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
 
 export function Login() {
     const dispatch = useDispatch();
@@ -36,25 +32,18 @@ export function Login() {
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
-<<<<<<< HEAD
                 firebase.database().ref().child("users/" + result.user.uid + "/birthdate").set("YYYY-MM-DD");
                 firebase.database().ref().child("users/" + result.user.uid + "/height/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/sex/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/activityLevel/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/weight/" + datum).set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/goal/").set("none");
-=======
->>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
               }
             console.log(check);}
         );
         console.log(result.user.uid);
         console.log(datum);
-<<<<<<< HEAD
         firebase.database().ref().child("users/" + result.user.uid  + "/birthdate").on('value',function(snap){
-=======
-        firebase.database().ref().child("users/" + result.user.uid  + "/age/").on('value',function(snap){
->>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
             if (snap){
               newValue= snap.val();
               console.log("age exists");
@@ -65,7 +54,6 @@ export function Login() {
             if (snap){
               newValue= snap.val();
             }
-<<<<<<< HEAD
             dispatch(addHeight(newValue));
           })
           firebase.database().ref().child("users/" + result.user.uid  + "/sex").on('value',function(snap){
@@ -95,9 +83,6 @@ export function Login() {
               })
             })
             dispatch(addWeight(newValue))
-=======
-            dispatch(pulse(newValue));
->>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
           })
         firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
