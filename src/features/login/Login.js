@@ -7,7 +7,7 @@ import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
 import { steps, pulse } from '../main/mainSlice';
-import { addAge, addHeight, addSex, addActivityLevel, addGoal } from '../profile/profileSlice';
+import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -32,7 +32,7 @@ export function Login() {
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
-                firebase.database().ref().child("users/" + result.user.uid + "/age").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/birthdate").set("YYYY-MM-DD");
                 firebase.database().ref().child("users/" + result.user.uid + "/height/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/sex/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/activityLevel/").set("none");
@@ -43,11 +43,11 @@ export function Login() {
         );
         console.log(result.user.uid);
         console.log(datum);
-        firebase.database().ref().child("users/" + result.user.uid  + "/age").on('value',function(snap){
+        firebase.database().ref().child("users/" + result.user.uid  + "/birthdate").on('value',function(snap){
             if (snap){
               newValue= snap.val();
             }
-            dispatch(addAge(newValue));
+            dispatch(addBirthdate(newValue));
           })
           firebase.database().ref().child("users/" + result.user.uid  + "/height").on('value',function(snap){
             if (snap){
@@ -74,10 +74,14 @@ export function Login() {
             dispatch(addGoal(newValue));
           })
           firebase.database().ref().child("users/" + result.user.uid  + "/weight").on('value',function(snap){
-            if (snap){
-              //get value here
-            }
-            //dispatch here
+            snap.forEach((snap1) => {
+              snap1.forEach((snap2) => {
+                snap2.forEach((snap3) => {
+                  newValue = snap3.val();
+                })
+              })
+            })
+            dispatch(addWeight(newValue))
           })
         firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){

@@ -20,6 +20,15 @@
     font-family: Impact, Courier, Fantasy;
     color:#ffffff;
   }
+  
+  .textbox {
+    font-size: 32px;
+    padding: 2px;
+    width: 64px;
+    text-align: center;
+    margin-right: 4px;
+  }
+
   .button {
     appearance: none;
     background: none;
@@ -35,76 +44,6 @@
     transition: all 0.15s;
     font-family: Impact, Courier, Fantasy;
   }
-  
-  .textbox {
-    font-size: 32px;
-    padding: 2px;
-    width: 64px;
-    text-align: center;
-    margin-right: 4px;
-  }
-  
-  .button:hover,
-  .button:focus {
-    border: 2px solid rgba(112, 76, 182, 0.4);
-  }
-  
-  .button:active {
-    background-color: rgba(112, 76, 182, 0.2);
-  }
-  
-  .asyncButton {
-    composes: button;
-    position: relative;
-  }
-  
-  .asyncButton:after {
-    content: '';
-    background-color: rgba(211, 6, 238, 0.15);
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    transition: width 1s linear, opacity 0.5s ease 1s;
-  }
-  
-  .asyncButton:active:after {
-    width: 0%;
-    opacity: 1;
-    transition: 0s;
-  }
-  .stepText{
-    font-size: 50px;
-    padding-left: 16px;
-    padding-right: 16px;
-    margin-top: 2px;
-    font-family: Impact, Courier, Fantasy;
-    color:#ffffff;
-  }
-  .stepValue{
-    font-size: 50px;
-    padding-left: 16px;
-    padding-right: 16px;
-    margin-top: 2px;
-    font-family: Impact, Courier, Fantasy;
-    color:#6495ED;
-  }
-  .steps{
-    composes: asyncButton;
-    color:#6495ED;
-}
-.pulse{
-    composes: asyncButton;
-    color:#DC143C;
-}
-.calories{
-    composes: asyncButton;
-    color:#80ff00af;
-}
-
 
 
 .profileTitle{
@@ -121,8 +60,8 @@
 }
 
 .profileforms{
-    padding-left: 200px;
-    padding-right: 16px;
+    padding-left: 280px;
+    padding-right: 70px;
     margin-top: 30px;
     color: #ffffff;
     text-align: left;
@@ -131,3 +70,16 @@
 .profileName{
     display:none;
 }
+
+input, select, textarea {
+  width:180px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.editButton{
+  float: right;
+}
+
+
