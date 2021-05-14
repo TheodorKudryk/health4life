@@ -28,12 +28,18 @@ const Profile = () => {
     const activityLevel = useSelector(selectActivityLevel);
     const goal = useSelector(selectGoal);
     const [weightInputText, setWeightInputText] = useState('');
+<<<<<<< HEAD
+=======
+    console.log("test");
+    const [ageInputText, setAgeInputText] = useState('');
+>>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
     const [sexInputText, setSexInputText] = useState('');
     const [activityLevelInputText, setActivityLevelInputText] = useState('')
     const [heightInputText, setHeightInputText] = useState('')
     const [goalInputText, setGoalInputText] = useState('')
     const [birthdateInputText, setBirthdateInputText] = useState(birthdate)
     const dispatch = useDispatch();
+<<<<<<< HEAD
     const uid = useSelector(selectUserId);
     const editbool = useSelector(selectEditing);
     const copyeditbool = editbool.slice();
@@ -101,6 +107,14 @@ const Profile = () => {
       console.log("n is " + number)
       copyeditbool[number] = true;
       dispatch(addEdit(copyeditbool));
+=======
+    const age = useSelector(selectAge);
+
+    const submitAge = e => {
+      e.preventDefault();
+
+      dispatch(addAge(ageInputText));
+>>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
     }
 
     return(
@@ -112,6 +126,7 @@ const Profile = () => {
         </div>
 
         <div class={styles.profileforms}>
+<<<<<<< HEAD
           Your birthdate: {birthdate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(1, e)}>Edit</button>
             {editbool[1] ? (<form onSubmit={submitBirthdate}>
                <input onChange={e =>setBirthdateInputText(e.target.value)} 
@@ -150,6 +165,41 @@ const Profile = () => {
             <div class={styles.profileforms}>
           Your activity level: {activityLevel}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(5, e)}>Edit</button>
             {editbool[5] ? ( <form onSubmit={submitActivityLevel}>
+=======
+          <form onSubmit={()=>dispatch(addWeight(weightInputText))}>
+               <br/><input onChange={e =>setWeightInputText(e.target.value)} 
+               value={weightInputText}/>
+               <button type ="submit">Update</button><br/>
+           </form>
+           </div>
+
+        <div class={styles.profileforms}>
+        Your age: <form onSubmit={submitAge}>
+        <input onChange={e =>setAgeInputText(e.target.value)} 
+        value={ageInputText}/>
+        <button type ="submit">Update</button> 
+        </form>
+       </div>
+
+       <div class={styles.profileforms}>
+        Your height: <form onSubmit={()=>dispatch(addHeight(heightInputText))}>
+        <input onChange={e =>setHeightInputText(e.target.value)} 
+        value={heightInputText}/>
+        <button type ="submit">Update</button> 
+        </form>
+       </div>
+
+       <div class={styles.profileforms}>
+        Your sex: <form onSubmit={()=>dispatch(addSex(sexInputText))}>
+        <input onChange={e =>setSexInputText(e.target.value)} 
+        value={sexInputText}/>
+        <button type ="submit">Update</button> 
+        </form>
+        </div>
+
+        <div class={styles.profileforms}>
+               Set your activity level: <form onSubmit={()=>dispatch(addActivityLevel(activityLevelInputText))}>
+>>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
               <select onChange={e=>setActivityLevelInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
                 <option value="1.2">Little exercise or sedentary</option>
@@ -159,12 +209,21 @@ const Profile = () => {
                 <option value="1.9">Hard training or physical job</option>
                 </select>
                 <button type="submit">Update</button>
+<<<<<<< HEAD
                 </form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
           Your weight goal: {goal}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(6, e)}>Edit</button>
             {editbool[6] ? ( <form onSubmit={submitGoal}>
+=======
+                </form>
+                </div>
+          
+                <div class={styles.profileforms}>
+                    Set your goal:
+                    <form onSubmit={()=>dispatch(addGoal(goalInputText))}>
+>>>>>>> 5dbf8277c6b7f0f574853511e49af1c009ad7971
               <select onChange={e=>setGoalInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
                 <option value="lose weight">Lose weight</option>

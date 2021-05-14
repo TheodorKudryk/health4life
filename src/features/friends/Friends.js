@@ -28,7 +28,7 @@ const Friends = () => {
         firebase.database().ref().child('users/' + uid + "/friends").once('value',(snap)=>{
             if (snap){
               snap.forEach(obj => {
-                  if (obj.val() == mail) {
+                  if (obj.val() === mail) {
                     id = obj.key;
                     return;
                   }
@@ -47,7 +47,7 @@ const Friends = () => {
         firebase.database().ref().child("users").once('value',(snap)=>{
             if (snap){
               snap.forEach(user => {
-                  if (user.val().email == inputText) {
+                  if (user.val().email === inputText) {
                     setSearchResult(user.val().email);
                     setInputText('');
                     return;
@@ -73,7 +73,7 @@ const Friends = () => {
            </form>
            <br/>
            {searchResult}
-           {searchResult == '' ? "No user with that email found" : <button onClick={handleAdd}>Add</button>}
+           {searchResult === '' ? "No user with that email found" : <button onClick={handleAdd}>Add</button>}
            <br/>
            <br/>
            <br/>
