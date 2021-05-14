@@ -8,6 +8,7 @@ import './Login.css';
 import pic from './app.png'
 import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
+import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -34,6 +35,13 @@ export function Login() {
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/intake").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedSteps").set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).set(0);
+                firebase.database().ref().child("users/" + result.user.uid + "/birthdate").set("YYYY-MM-DD");
+                firebase.database().ref().child("users/" + result.user.uid + "/height/").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/sex/").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/activityLevel/").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/weight/" + datum).set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/goal/").set("none");
               }
             console.log(check);}
         );
@@ -64,12 +72,12 @@ export function Login() {
 
         console.log(result.user.uid);
         console.log(datum);
-        firebase.database().ref().child("users/" + result.user.uid  + "/age/").on('value',function(snap){
+        firebase.database().ref().child("users/" + result.user.uid  + "/birthdate").on('value',function(snap){
             if (snap){
               newValue= snap.val();
               console.log("age exists");
             }
-            dispatch(addAge(newValue));
+            dispatch(addBirthdate(newValue));
           })
           firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
             if (snap){
@@ -79,6 +87,42 @@ export function Login() {
               newValue=0;
             }
             dispatch(pulse(newValue));
+          })
+
+          firebase.database().ref().child("users/" + result.user.uid  + "/sex").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(addSex(newValue));
+          })
+          firebase.database().ref().child("users/" + result.user.uid  + "/activityLevel").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(addActivityLevel(newValue));
+          })
+          firebase.database().ref().child("users/" + result.user.uid  + "/goal").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(addGoal(newValue));
+          })
+          firebase.database().ref().child("users/" + result.user.uid  + "/height").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(addHeight(newValue));
+          })
+
+          firebase.database().ref().child("users/" + result.user.uid  + "/weight").on('value',function(snap){
+            snap.forEach((snap1) => {
+              snap1.forEach((snap2) => {
+                snap2.forEach((snap3) => {
+                  newValue = snap3.val();
+                })
+              })
+            })
+            dispatch(addWeight(newValue))
           })
           firebase.database().ref().child("users/" + result.user.uid  + "/calories/" + datum + "/intake").on('value',function(snap){
             if (snap){

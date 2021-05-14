@@ -2,10 +2,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
   weight: "none",
   height: "none",
-  age: "none",
+  birthdate: "none",
   sex: "none",
   goal: "none",
   activityLevel: "none",
+  editing: [false, false, false, false, false, false, false]
+  //name, birthdate, height, sex, weight, activityLevel, goal
 };
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -31,8 +33,8 @@ export const profileSlice = createSlice({
       //Det kanske man kan ha som en would.
       state.weight = action.payload;
     },
-    addAge: (state, action) => {
-        state.age = action.payload;
+    addBirthdate: (state, action) => {
+        state.birthdate = action.payload;
     },
     addSex: (state, action) => {
         state.sex = action.payload;
@@ -45,20 +47,30 @@ export const profileSlice = createSlice({
     },
     addGoal: (state, action) => {
         state.goal = action.payload;
+    },
+    addEdit: (state, action) => {
+      state.editing = action.payload;
     }
   }
 });
 
 
 
-export const { addWeight, addAge, addSex, addHeight, addActivityLevel, addGoal } = profileSlice.actions;
+export const { addWeight, addBirthdate, addSex, addHeight, addActivityLevel, addGoal, addEdit } = profileSlice.actions;
 
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 //export const selectWeights = (state) => state.weights.value;
-export const selectAge = (state) => state.profile.age;
+export const selectBirthdate = (state) => state.profile.birthdate;
+export const selectHeight = (state) => state.profile.height;
+export const selectSex = (state) => state.profile.sex;
+export const selectWeight = (state) => state.profile.weight;
+export const selectActivityLevel = (state) => state.profile.activityLevel;
+export const selectGoal = (state) => state.profile.goal;
+export const selectEditing = (state) => state.profile.editing;
+
 
 export default profileSlice.reducer;
 
