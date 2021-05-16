@@ -1,68 +1,95 @@
 import React, { useState} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-    create, toggleComplete, remove
-} from './friendsSlice';
+import { useSelector} from 'react-redux';
+import {selectFriendList, selectFriendRequests} from './friendsSlice';
 import "./friends.css";
 import firebase from 'firebase';
-import {selectUserId} from '../login/loginSlice';
+import {selectUserId, selectUserEmail, selectUserName} from '../login/loginSlice';
 
 const Friends = () => {
     const [inputText, setInputText] = useState('');
-    const dispatch = useDispatch();
-    const friends = useSelector(state => state.friends);
+    const [message, setMessage] = useState('');
+    const friends = useSelector(selectFriendList);
+    const requests = useSelector(selectFriendRequests);
     const uid = useSelector(selectUserId);
-    const [searchResult, setSearchResult] = useState('');
+    const myEmail = useSelector(selectUserEmail);
+    const myName = useSelector(selectUserName);
+    const [searchResult, setSearchResult] = useState([]);
 
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        dispatch(create(inputText));
-
-        setInputText('');
-    };
-
-    const handleRemove = (mail) => () => {
-        dispatch(remove(mail));
-        var id;
-        firebase.database().ref().child('users/' + uid + "/friends").once('value',(snap)=>{
-            if (snap){
-              snap.forEach(obj => {
-                  if (obj.val() === mail) {
-                    id = obj.key;
-                    return;
-                  }
-              });
-            }
-        }).then(()=>firebase.database().ref('users/' + uid + "/friends/" + id).remove());
-        
-    };
-
-    const handleToggle = (id) => () => {
-        dispatch(toggleComplete(id));
+    const handleRemove = (id) => () => {
+        setMessage("");
+        firebase.database().ref('users/' + uid + "/friends/friendList/" + id).remove()
     };
 
     const handleSearch = e => {
         e.preventDefault();
+        
         firebase.database().ref().child("users").once('value',(snap)=>{
             if (snap){
               snap.forEach(user => {
                   if (user.val().email === inputText) {
-                    setSearchResult(user.val().email);
                     setInputText('');
+                    for(var friend of friends) {
+                        if (friend.email === user.val().email) {
+                            setMessage(user.val().name + " is already your friend");
+                            return;
+                        }
+                    }
+                    for(var request of requests) {
+                        if (request.email === user.val().email) {
+                            setMessage(user.val().name + " has already sent you a friend request");
+                            return;
+                        }
+                    }
+                    
+                    if (user.val().friends.requestsReceived) {
+                        for(var id of Object.entries(user.val().friends.requestsReceived)) {
+                            console.log(id[0], id === uid)
+                            if (id[0] === uid) {
+                                setMessage("Friend request has already been sent to " + user.val().name);
+                                return;
+                            }
+                        };
+                    };
+                    
+                    setSearchResult([user.val().email,user.val().name,user.key]);
+                    setMessage('')
                     return;
                   }
               });
             }
         });
 
-        setSearchResult('');
+        setSearchResult([]);
+        setMessage("No user with that email found");
     };
 
-    const handleAdd = () => {
-        dispatch(create(searchResult));
-        firebase.database().ref('users/' + uid + "/friends").push(searchResult);
+    const handleSendRequest = () => {
+        firebase.database().ref('users/' + searchResult[2] + "/friends/requestsReceived/" + uid).set(
+            {
+                "email": myEmail,
+                "name": myName
+            }
+        );
         setInputText('');
+        setSearchResult([]);
+    }
+
+    const handleAccept = (friend) => () => {
+        firebase.database().ref('users/' + uid + "/friends/requestsReceived/" + friend.id).remove()
+        firebase.database().ref('users/' + uid + "/friends/friendList/" + friend.id).set(
+            {
+                "email": friend.email,
+                "name": friend.name
+            }
+        );
+        setInputText('');
+        setSearchResult([]);
+    };
+
+    const handleDecline = (friend) => () => {
+        firebase.database().ref('users/' + uid + "/friends/requestsReceived/" + friend.id).remove()
+        setInputText('');
+        setSearchResult([]);
     };
 
     return (
@@ -72,9 +99,19 @@ const Friends = () => {
             <button type='submit'>Search</button>
            </form>
            <br/>
-           {searchResult}
-           {searchResult === '' ? "No user with that email found" : <button onClick={handleAdd}>Add</button>}
+           {searchResult.length === 0 ? message : <div>{searchResult[0]} <button onClick={handleSendRequest}>Add</button></div>}
            <br/>
+           <br/>
+           <br/>
+           <br/>
+           Friendrequests:
+           {requests.map(friend => (
+               <div key={friend.id}>
+                   {friend.email}
+                   <button onClick={handleAccept(friend)}>Accept</button>
+                   <button onClick={handleDecline(friend)}>Decline</button>
+               </div>
+           ))}
            <br/>
            <br/>
            <br/>
@@ -82,11 +119,9 @@ const Friends = () => {
            Friends:
            {friends.map(friend => (
                <div key={friend.id}>
-                   {friend.description}
+                   {friend.email}
                    {friend.isComplete ? '  ACTIVE  ' : ''}
-                   
-                   <button onClick={handleRemove(friend.description)}>Remove</button>
-                   <button onClick={handleToggle(friend.description)}>Toggle</button>
+                   <button onClick={handleRemove(friend.id)}>Remove</button>
                </div>
            ))}
         </div>

@@ -9,6 +9,7 @@ import pic from './app.png'
 import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
+import {create, updateRequests} from '../friends/friendsSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -69,7 +70,16 @@ export function Login() {
               }
             console.log(check);}
         );
-
+        //  ------------------------------------------FRIENDS-------------------------------------------------------------------
+        firebase.database().ref().child("users/" + result.user.uid  + "/friends/friendList").on('value',function(snap){
+            if (snap)
+                dispatch(create(snap.val()));
+        });
+        firebase.database().ref().child("users/" + result.user.uid  + "/friends/requestsReceived").on('value',function(snap){
+            if (snap)
+                dispatch(updateRequests(snap.val()));
+        });
+        // ------------------------------------------^FRIENDS^------------------------------------------------------------------
         console.log(result.user.uid);
         console.log(datum);
         firebase.database().ref().child("users/" + result.user.uid  + "/birthdate").on('value',function(snap){
