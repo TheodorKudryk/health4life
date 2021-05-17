@@ -118,7 +118,7 @@ const Friends = () => {
            <br/>
            <br/>
            <br/>
-           Friendrequests:
+           Friend requests:
            {requests.map(friend => (
                <div key={friend.id}>
                    {friend.email}
