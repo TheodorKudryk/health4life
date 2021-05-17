@@ -107,7 +107,7 @@ const Friends = () => {
     const createEvent = () => {
         setEditCreateEvent(!editCreateEvent);
         resetEvent()
-        
+        console.log("hi")
         var participants = {[uid]: {"role":"host", "accepted": true}}
         eventInvites.forEach(invite=>participants[invite.id] = {"role":"participant", "accepted": false})
         firebase.database().ref('events').push(
@@ -172,7 +172,7 @@ const Friends = () => {
                     <br/>
                     Location<input onChange={e =>setEventLocation(e.target.value)} value={eventLocation}/>
                     <br/>
-                    <button onClick={() =>createEvent}>Create event</button>
+                    <button onClick={createEvent}>Create event</button>
                     <button onClick={() => {resetEvent();setEditCreateEvent(false)}}>stop edit</button>
                 </div>
             : <></>}
