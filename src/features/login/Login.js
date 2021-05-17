@@ -6,10 +6,9 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories, eventlist } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
-import {create, updateRequests} from '../friends/friendsSlice';
 
 export function Login() {
     const dispatch = useDispatch();
@@ -26,12 +25,11 @@ export function Login() {
         const datum = new Date().toLocaleDateString('zh-Hans-CN');
         firebase.database().ref().child("users/" + result.user.uid).once("value")
         .then(function(snapshot) {
-            check = snapshot.hasChild("name");
+          check = snapshot.hasChildren();
         }).then(
             ()=> {if(!check){
                 firstLogin = true;
                 window.location.hash="popup";
-                firebase.database().ref().child("users/" + result.user.uid + "/email").set(result.user.email);
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
@@ -71,16 +69,7 @@ export function Login() {
               }
             console.log(check);}
         );
-        //  ------------------------------------------FRIENDS-------------------------------------------------------------------
-        firebase.database().ref().child("users/" + result.user.uid  + "/friends/friendList").on('value',function(snap){
-            if (snap)
-                dispatch(create(snap.val()));
-        });
-        firebase.database().ref().child("users/" + result.user.uid  + "/friends/requestsReceived").on('value',function(snap){
-            if (snap)
-                dispatch(updateRequests(snap.val()));
-        });
-        // ------------------------------------------^FRIENDS^------------------------------------------------------------------
+
         console.log(result.user.uid);
         console.log(datum);
         firebase.database().ref().child("users/" + result.user.uid  + "/birthdate").on('value',function(snap){
@@ -147,6 +136,19 @@ export function Login() {
             }
             dispatch(excerciseCalories(newValue));
           })
+          firebase.database().ref().child("events").once("value", (snap) => {
+            snap.forEach((childsnap)=>{
+             console.log(childsnap.child("participants").hasChild(result.user.uid));
+                if(childsnap.child("participants").hasChild(result.user.uid)){
+                   
+                    console.log(childsnap.child("eventInfo").val());
+                 Object.values(childsnap.child("eventInfo").val())
+                 dispatch(eventlist(Object.values(childsnap.child("eventInfo").val())))
+                    
+                }
+     
+            });
+        });
           firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
@@ -155,12 +157,14 @@ export function Login() {
               newValue=0;
             }
             dispatch(steps(newValue));
-      
-          })
-          if(!firstLogin){
+            
+            if(!firstLogin){
             window.location.hash="main";
-          }  
+            }
+          })
+        
           
+        
         })
     }
     return (
