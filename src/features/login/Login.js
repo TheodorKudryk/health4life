@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories, eventlist } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
 import {create, updateRequests} from '../friends/friendsSlice';
@@ -147,6 +147,19 @@ export function Login() {
             }
             dispatch(excerciseCalories(newValue));
           })
+          firebase.database().ref().child("events").once("value", (snap) => {
+            snap.forEach((childsnap)=>{
+             console.log(childsnap.child("participants").hasChild(result.user.uid));
+                if(childsnap.child("participants").hasChild(result.user.uid)){
+                   
+                    console.log(childsnap.child("eventInfo").val());
+                 Object.values(childsnap.child("eventInfo").val())
+                 dispatch(eventlist(Object.values(childsnap.child("eventInfo").val())))
+                    
+                }
+     
+            });
+        });
           firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
