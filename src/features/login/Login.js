@@ -155,14 +155,12 @@ export function Login() {
               newValue=0;
             }
             dispatch(steps(newValue));
-            
-            if(!firstLogin){
-            window.location.hash="main";
-            }
+      
           })
-        
+          if(!firstLogin){
+            window.location.hash="main";
+          }  
           
-        
         })
     }
     return (
