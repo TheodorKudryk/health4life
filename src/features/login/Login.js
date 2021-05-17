@@ -26,7 +26,7 @@ export function Login() {
         const datum = new Date().toLocaleDateString('zh-Hans-CN');
         firebase.database().ref().child("users/" + result.user.uid).once("value")
         .then(function(snapshot) {
-          check = snapshot.hasChildren();
+            check = snapshot.hasChild("name");
         }).then(
             ()=> {if(!check){
                 firstLogin = true;
