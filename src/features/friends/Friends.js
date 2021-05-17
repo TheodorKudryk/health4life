@@ -20,7 +20,7 @@ const Friends = () => {
     const myName = useSelector(selectUserName);
     const [searchResult, setSearchResult] = useState([]);
 
-    const handleRemove = (id) => () => {
+    const handleRemove = (id) => {
         setMessage("");
         firebase.database().ref('users/' + uid + "/friends/friendList/" + id).remove()
     };
@@ -97,13 +97,29 @@ const Friends = () => {
         setSearchResult([]);
     };
 
+    function resetEvent() {
+        setEventTime('');
+        setEventLocation('');
+        setEventDescription('');
+        setEventInvites([]);
+    }
+
     const createEvent = () => {
         setEditCreateEvent(!editCreateEvent);
-        //setEventTime('');
-        //setEventLocation('');
-        //setEventDescription('');
-        console.log("Event created")
-        // add it to database here
+        resetEvent()
+        
+        var participants = {[uid]: {"role":"host", "accepted": true}}
+        eventInvites.forEach(invite=>participants[invite.id] = {"role":"participant", "accepted": false})
+        firebase.database().ref('events').push(
+            {
+                "participants": participants,
+                "eventInfo": {
+                    "description": eventDescription,
+                    "location": eventLocation,
+                    "time": eventTime
+                }
+            }
+        );
     };
 
     return (
@@ -140,7 +156,7 @@ const Friends = () => {
                             :
                             <button onClick={()=>setEventInvites([...eventInvites,friend])}>Invite</button>
                         )
-                    : <button onClick={handleRemove(friend.id)}>Remove</button>}
+                    : <button onClick={() => handleRemove(friend.id)}>Remove</button>}
                </div>
            ))}
            <br/>
@@ -149,15 +165,16 @@ const Friends = () => {
            <br/>
            {editCreateEvent ? <></> : <button onClick={() => setEditCreateEvent(!editCreateEvent)}>Create event</button>}
            {editCreateEvent ? 
-                (<form onSubmit={createEvent}>
+                <div>
                     Description<input onChange={e =>setEventDescription(e.target.value)} value={eventDescription}/>
                     <br/>
                     Time<input onChange={e =>setEventTime(e.target.value)} value={eventTime} pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" placeholder="YYYY-MM-DD TT:TT"/>
                     <br/>
                     Location<input onChange={e =>setEventLocation(e.target.value)} value={eventLocation}/>
                     <br/>
-                    <button type ="submit">Create event</button><br/>
-                </form>)
+                    <button onClick={() =>createEvent}>Create event</button>
+                    <button onClick={() => {resetEvent();setEditCreateEvent(false)}}>stop edit</button>
+                </div>
             : <></>}
         </div>
     )
