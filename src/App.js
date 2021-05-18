@@ -7,6 +7,7 @@ import {Login} from "./features/login/Login";
 import {Nav} from "./features/nav/Nav";
 import Profile from "./features/profile/Profile";
 import Friends from "./features/friends/Friends";
+import Logs from "./features/logs/Logs";
 import Show from "./app/show";
 import Popup from './features/main/Popup'
 
@@ -28,7 +29,7 @@ export default function App() {
       <Show hash="#profile"><Profile/></Show>
       <Show hash="#main"><Main/></Show>
       <Show hash="#friends"><Friends/></Show>
-      <Show hash="#logs">Logs</Show>
+      <Show hash="#logs"><Logs/></Show>
       <Show hash="#popup"><Popup></Popup></Show>
     </div>
   )

@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories, eventlist } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories, eventlist, allSteps } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight, addName, addBMR } from '../profile/profileSlice';
 import {create, updateRequests} from '../friends/friendsSlice';
@@ -174,6 +174,16 @@ export function Login() {
      
             });
         });
+
+        
+        firebase.database().ref().child("users/" + result.user.uid  + "/steps/").on('value',function(snap){
+          if (snap){
+            newValue= snap.val();
+          }
+          dispatch(allSteps(newValue));
+        })
+
+
           firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
@@ -184,11 +194,14 @@ export function Login() {
             dispatch(steps(newValue));
       
           })
+           
           if(!firstLogin){
             window.location.hash="main";
-          }  
-          
+          } 
         })
+
+        
+
     }
     return (
         <div>
