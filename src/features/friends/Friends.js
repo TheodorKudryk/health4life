@@ -22,7 +22,8 @@ const Friends = () => {
 
     const handleRemove = (id) => {
         setMessage("");
-        firebase.database().ref('users/' + uid + "/friends/friendList/" + id).remove()
+        firebase.database().ref('users/' + uid + "/friends/friendList/" + id).remove();
+        firebase.database().ref('users/' + id + "/friends/friendList/" + uid).remove();
     };
 
     const handleSearch = e => {
