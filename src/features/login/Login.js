@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories, eventlist, allSteps } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories, eventlist, allSteps, clearEvent } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight, addName, addBMR } from '../profile/profileSlice';
 import {create, updateRequests} from '../friends/friendsSlice';
@@ -161,18 +161,17 @@ export function Login() {
             }
             dispatch(excerciseCalories(newValue));
           })
-          firebase.database().ref().child("events").once("value", (snap) => {
+          firebase.database().ref().child("events").on("value", (snap) => {
+            dispatch(clearEvent());
             snap.forEach((childsnap)=>{
              console.log(childsnap.child("participants").hasChild(result.user.uid));
-                if(childsnap.child("participants").hasChild(result.user.uid)){
-                   
+                if(childsnap.child("participants").hasChild(result.user.uid)){  
                     console.log(childsnap.child("eventInfo").val());
                  Object.values(childsnap.child("eventInfo").val())
                  dispatch(eventlist(Object.values(childsnap.child("eventInfo").val())))
                     
                 }
-     
-            });
+              });
         });
 
         

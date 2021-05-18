@@ -35,12 +35,16 @@ const mainSlice = createSlice({
       },
       eventlist: (state, action) => {
         state.eventlist.push(action.payload)
+      },
+      clearEvent: (state) => {
+        state.eventlist.splice(0, state.eventlist.length)
+        console.log(state.eventlist);
       }
       
 }
   });
 
-  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist, allSteps} = mainSlice.actions
+  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist, allSteps, clearEvent} = mainSlice.actions
 
   
 
