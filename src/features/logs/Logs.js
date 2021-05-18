@@ -414,7 +414,7 @@ const Logs = () => {
                 //.attr("transform", `translate(${margin.left},0)`)
                 //.attr("transform", "rotate(90)")
                 //.enter()
-                .call(axisBottom(x).ticks(stepsData.length).tickFormat(timeFormat("%Y/%m/%d")))
+                .call(axisBottom(x).ticks(stepsData.length-1).tickFormat(timeFormat("%Y/%m/%d")))
                 .selectAll("text") 
                 .style("text-anchor", "end")
                 .attr("dx", "-.8em")
