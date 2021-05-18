@@ -10,7 +10,7 @@ import {
     selectExercise, 
     selectEventlist
   } from './mainSlice';
-  import { selectUserName, selectUserId} from '../login/loginSlice';
+  import { selectUserId} from '../login/loginSlice';
   import {selectName } from '../profile/profileSlice';
   import './Popup.css'
   import {useDispatch} from 'react-redux'
@@ -84,9 +84,9 @@ const Main = () => {
                 <span class="pulseValue">{pulse}</span>
                 
                 <span class="calorieValue">{eatenCals - (exerciseCals + ((count)*0.04)) > 0 ?
-                    (eatenCals - (exerciseCals + ((count)*0.04))).toFixed(2)
+                    (eatenCals - (exerciseCals + ((count)*0.04))).toFixed(0)
                     :
-                    ((eatenCals - (exerciseCals + ((count)*0.04)))*-1).toFixed(2)
+                    ((eatenCals - (exerciseCals + ((count)*0.04)))*-1).toFixed(0)
                 }</span>
               </p>
             </div>

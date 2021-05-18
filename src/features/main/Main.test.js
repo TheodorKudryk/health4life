@@ -5,8 +5,7 @@ async function btn(){
 
     await driver.get("http://localhost:3000/#main");
     
-    await driver.findElement(By.className("logInBtn")).click();
-
+    await driver.findElement(By.className("stepBtn")).click();
    
 }
 
