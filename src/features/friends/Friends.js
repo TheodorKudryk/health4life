@@ -87,6 +87,12 @@ const Friends = () => {
                 "name": friend.name
             }
         );
+        firebase.database().ref('users/' + friend.id + "/friends/friendList/" + uid).set(
+            {
+                "email": myEmail,
+                "name": myName
+            }
+        );
         setInputText('');
         setSearchResult([]);
     };
