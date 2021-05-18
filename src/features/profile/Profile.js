@@ -9,13 +9,17 @@ import {
     addActivityLevel,
     addGoal,
     addEdit,
+    addName,
+    calculateBMR,
     selectBirthdate,
     selectHeight,
     selectSex,
     selectWeight,
     selectActivityLevel,
     selectGoal,
-    selectEditing
+    selectEditing,
+    selectName,
+    selectBMR,
   } from './profileSlice';
   import { selectUserName, selectUserId } from '../login/loginSlice';
   import firebase from 'firebase';
@@ -27,18 +31,25 @@ const Profile = () => {
     const weight = useSelector(selectWeight);
     const activityLevel = useSelector(selectActivityLevel);
     const goal = useSelector(selectGoal);
+    const name = useSelector(selectName);
+    const BMR = useSelector(selectBMR);
     const [weightInputText, setWeightInputText] = useState('');
     const [sexInputText, setSexInputText] = useState('');
     const [activityLevelInputText, setActivityLevelInputText] = useState('')
     const [heightInputText, setHeightInputText] = useState('')
     const [goalInputText, setGoalInputText] = useState('')
     const [birthdateInputText, setBirthdateInputText] = useState(birthdate)
+    const [nameInputText, setNameInputText] = useState('')
     const dispatch = useDispatch();
     const uid = useSelector(selectUserId);
     const editbool = useSelector(selectEditing);
     const copyeditbool = editbool.slice();
 
+
+
     const date = new Date().toLocaleDateString('zh-Hans-CN');
+
+
 
     const submitHeight = e => {
       e.preventDefault();
@@ -46,6 +57,8 @@ const Profile = () => {
       dispatch(addHeight(heightInputText));
       copyeditbool[2] = false;
       dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
     }
 
     const submitSex = e => {
@@ -54,6 +67,8 @@ const Profile = () => {
       dispatch(addSex(sexInputText));
       copyeditbool[3] = false;
       dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
     }
 
     const submitActivityLevel = e => {
@@ -62,6 +77,8 @@ const Profile = () => {
       dispatch(addActivityLevel(activityLevelInputText));
       copyeditbool[5] = false;
       dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
     }
 
     const submitGoal = e => {
@@ -70,6 +87,8 @@ const Profile = () => {
       dispatch(addGoal(goalInputText));
       copyeditbool[6] = false;
       dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
     }
 
     const submitWeight = e => {
@@ -78,6 +97,9 @@ const Profile = () => {
       dispatch(addWeight(weightInputText));
       copyeditbool[4] = false;
       dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+     // firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+     console.log("BMR weight " + BMR)
     }
 
     const submitBirthdate = e => {
@@ -85,6 +107,17 @@ const Profile = () => {
       firebase.database().ref('users/' + uid + "/birthdate").set(birthdateInputText);
       dispatch(addBirthdate(birthdateInputText));
       copyeditbool[1] = false;
+      dispatch(addEdit(copyeditbool));
+      dispatch(calculateBMR())
+      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+      test();
+    }
+
+  const submitName = e => {
+      e.preventDefault();
+      firebase.database().ref('users/' + uid + "/name").set(nameInputText);
+      dispatch(addName(nameInputText));
+      copyeditbool[7] = false;
       dispatch(addEdit(copyeditbool));
     }
 
@@ -103,6 +136,14 @@ const Profile = () => {
       dispatch(addEdit(copyeditbool));
     }
 
+    const test = () => {
+      console.log("BMR IS " + BMR)
+    }
+
+    const calculatedBMR = BMR*activityLevel;
+    const lose = calculatedBMR - 500;
+    const gain = calculatedBMR + 500;
+
     return(
 
         <div class={styles.profile}>
@@ -112,7 +153,15 @@ const Profile = () => {
         </div>
 
         <div class={styles.profileforms}>
-          Your birthdate: {birthdate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(1, e)}>Edit</button>
+          Your name: {name}<button class={styles.editButton} onClick={e=>toggleEdit(7, e)}>Edit</button>
+            {editbool[7] ? (<form onSubmit={submitName}>
+               <input onChange={e =>setNameInputText(e.target.value)} 
+               value={nameInputText}/>
+               <button type ="submit">Update</button><br/></form>) : <></>}
+            </div>
+
+        <div class={styles.profileforms}>
+          Your birthdate: {birthdate}<button class={styles.editButton} onClick={e=>toggleEdit(1, e)}>Edit</button>
             {editbool[1] ? (<form onSubmit={submitBirthdate}>
                <input onChange={e =>setBirthdateInputText(e.target.value)} 
                value={birthdateInputText} pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"/>
@@ -120,15 +169,15 @@ const Profile = () => {
             </div>
 
        <div class={styles.profileforms}>
-          Your height: {height}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton}onClick={e=>toggleEdit(2, e)}>Edit</button>
+          Your height: {height == "none" ? "none" : <>{height} cm</> }<button class={styles.editButton}onClick={e=>toggleEdit(2, e)}>Edit</button>
             {editbool[2] ? (<form onSubmit={submitHeight}>
                <input onChange={e =>setHeightInputText(e.target.value)} 
-               value={heightInputText}/>
+               value={heightInputText} placeholder="   cm"/>
                <button type ="submit">Update</button><br/></form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
-          Your sex: {sex}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(3, e)}>Edit</button>
+          Your sex: {sex}<button class={styles.editButton} onClick={e=>toggleEdit(3, e)}>Edit</button>
             {editbool[3] ? ( <form onSubmit={submitSex}>
               <select onChange={e=>setSexInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
@@ -140,15 +189,15 @@ const Profile = () => {
             </div>
 
             <div class={styles.profileforms}>
-          Your weight: {weight}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(4, e)}>Edit</button>
+          Your weight: {weight}<button class={styles.editButton} onClick={e=>toggleEdit(4, e)}>Edit</button>
             {editbool[4] ? (<form onSubmit={submitWeight}>
                <input onChange={e =>setWeightInputText(e.target.value)} 
-               value={weightInputText}/>
+               value={weightInputText} placeholder="   kg"/>
                <button type ="submit">Update</button><br/></form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
-          Your activity level: {activityLevel}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(5, e)}>Edit</button>
+          Your activity level: {activityLevel}<button class={styles.editButton} onClick={e=>toggleEdit(5, e)}>Edit</button>
             {editbool[5] ? ( <form onSubmit={submitActivityLevel}>
               <select onChange={e=>setActivityLevelInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
@@ -163,7 +212,7 @@ const Profile = () => {
             </div>
 
             <div class={styles.profileforms}>
-          Your weight goal: {goal}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class={styles.editButton} onClick={e=>toggleEdit(6, e)}>Edit</button>
+          Your weight goal: {goal}<button class={styles.editButton} onClick={e=>toggleEdit(6, e)}>Edit</button>
             {editbool[6] ? ( <form onSubmit={submitGoal}>
               <select onChange={e=>setGoalInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
@@ -173,6 +222,14 @@ const Profile = () => {
                 </select>
                 <button type="submit">Update</button>
                 </form>) : <></>}
+            </div>  <p/><br/>
+            <div class={styles.BMR}>
+            Your BMR (basal metabolic rate): {BMR == "none" ? ("not enough profile info to calculate") : (<>{BMR}</>)}
+            <p/>The BMR is calculated from the Mifflin St-Jeor formula.
+            {activityLevel == "none" ? ("") : (<><p/>Based on your activity level, you burn {calculatedBMR} calories/day</>)}
+            {goal == "none" ? ("") : ("")}
+            {goal == "lose" ? (<>To lose 0.5 kg per week, your daily caloric total sould be {lose}</>) : ("")}
+            
             </div>
     </div>
     )

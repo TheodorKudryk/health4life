@@ -1,4 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { useSelector} from 'react-redux';
+import { selectUserName, selectUserId} from '../login/loginSlice';
+import firebase from 'firebase';
+
 const initialState = {
   weight: "none",
   height: "none",
@@ -6,9 +10,12 @@ const initialState = {
   sex: "none",
   goal: "none",
   activityLevel: "none",
-  editing: [false, false, false, false, false, false, false]
-  //name, birthdate, height, sex, weight, activityLevel, goal
+    //name, birthdate, height, sex, weight, activityLevel, goal, name
+  editing: [false, false, false, false, false, false, false, false],
+  name: "none",
+  BMR: "none"
 };
+
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -50,13 +57,43 @@ export const profileSlice = createSlice({
     },
     addEdit: (state, action) => {
       state.editing = action.payload;
-    }
+    },
+    addName: (state, action) => {
+      state.name = action.payload;
+    },
+    addBMR: (state, action) => {
+      state.BMR = action.payload;
+    },
+    calculateBMR: (state) => {
+      if (state.birthdate == "none" || state.height == "none" || state.sex == "none" ) {
+        state.BMR = "none"
+        console.log("this triggered")
+      } else {
+        const date = new Date();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        const day = date.getDate();
+        console.log("YEar is " + year)
+        const split = state.birthdate.split("-");
+        const birthyear = split[0];
+        const age = year - birthyear;
+        console.log("Age is" + age) 
+        if (state.sex == "female") {
+          state.BMR = 10*state.weight + 6.25*state.height -5*age - 161
+          console.log("triggered female")
+        } else if (state.sex == "male") {
+
+        } else if (state.sex == "other") {
+
+        }
+      }
+    },
   }
 });
 
 
 
-export const { addWeight, addBirthdate, addSex, addHeight, addActivityLevel, addGoal, addEdit } = profileSlice.actions;
+export const { addWeight, addBirthdate, addSex, addHeight, addActivityLevel, addGoal, addEdit, addName, calculateBMR, addBMR } = profileSlice.actions;
 
 
 // The function below is called a selector and allows us to select a value from
@@ -70,6 +107,8 @@ export const selectWeight = (state) => state.profile.weight;
 export const selectActivityLevel = (state) => state.profile.activityLevel;
 export const selectGoal = (state) => state.profile.goal;
 export const selectEditing = (state) => state.profile.editing;
+export const selectName = (state) => state.profile.name;
+export const selectBMR = (state) => state.profile.BMR;
 
 
 export default profileSlice.reducer;

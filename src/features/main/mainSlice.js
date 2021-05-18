@@ -4,7 +4,8 @@ const initialState = {
   count:0,
   pulse:0,
   calsBurned: 0,
-  calsEaten: 0
+  calsEaten: 0,
+  eventlist: []
 }
 
 const mainSlice = createSlice({
@@ -26,12 +27,15 @@ const mainSlice = createSlice({
       },
       eatenCalories: (state, action) =>{
         state.calsEaten = action.payload
+      },
+      eventlist: (state, action) => {
+        state.eventlist.push(action.payload)
       }
       
 }
   });
 
-  export const {pulse, steps, end, excerciseCalories, eatenCalories} = mainSlice.actions
+  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist} = mainSlice.actions
 
   
 
@@ -39,6 +43,7 @@ const mainSlice = createSlice({
   export const selectPulse = state => state.main.pulse
   export const selectEaten = state => state.main.calsEaten
   export const selectExercise = state => state.main.calsBurned
+  export const selectEventlist = state => state.main.eventlist
 
   
   

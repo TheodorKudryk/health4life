@@ -1,39 +1,51 @@
 import React, {useState} from 'react';
 import { useSelector} from 'react-redux';
-import styles from './Main.module.css';
+import './Main.css';
 import {
     selectPulse,
     selectValue, 
     excerciseCalories,
     eatenCalories, 
     selectEaten, 
-    selectExercise
+    selectExercise, 
+    selectEventlist
   } from './mainSlice';
   import { selectUserName, selectUserId} from '../login/loginSlice';
+  import {selectName } from '../profile/profileSlice';
   import './Popup.css'
   import {useDispatch} from 'react-redux'
   import firebase from 'firebase'
   
+  const navToLogs = ()=> window.location.hash="logs";
 
+  let count;
+  let eatenCals;
+  let exerciseCals;
+  let uName;
+  let pulse;
+  let name;
+  let uid;
+  let eventlist;
 
 const Main = () => {
-
-    const count = useSelector(selectValue)
-    const eatenCals = useSelector(selectEaten);
-    const exerciseCals = useSelector(selectExercise);
-    const uName = useSelector(selectUserName);
-    const pulse = useSelector(selectPulse);
-    const split = uName.split(" ");
-    const name = split[0]; 
     const dispatch = useDispatch();
-    const uid = useSelector(selectUserId);
+    count = useSelector(selectValue)
+    eatenCals = useSelector(selectEaten);
+    exerciseCals = useSelector(selectExercise);
+    name = useSelector(selectName);
+    pulse = useSelector(selectPulse);
+    uid = useSelector(selectUserId);
+    if(uName == null){
+        uName = "Hej";
+
+    } 
+    eventlist = useSelector(selectEventlist);
     const datum = new Date().toLocaleDateString('zh-Hans-CN');
-    let check = false;
     firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(count);
 
    const [calsInputText,setCalsInputText] = useState('');
    const [eatenCalsInputText,setEatenCalsInputText] = useState('');
-   
+   console.log(eventlist);
    const addCalories = (e)=>{
         e.preventDefault();
         let temp = parseFloat(exerciseCals + parseFloat(calsInputText));
@@ -53,28 +65,28 @@ const Main = () => {
     
 
     return(
-        <div className={styles.body}> 
-            <div className={styles.overlay}>
-                <div className={styles.value}>   
-                    Welcome back, {name.charAt(0).toUpperCase()}{name.slice(1)}! 
+        <div class= "body"> 
+            <div class= "overLay">
+                <div class="value">   
+                    Welcome back, {name}! 
                 </div>
-            <div className={styles.stepText}>Today's steps</div>
+            <div class="stepText">Today's steps</div>
             <div>
-                <div className={styles.stepValue}>{count}</div>
+                <div class="stepValue">{count}</div>
                 <div>
                     <button 
-                        className={styles.steps}
-                        aria-label="Increment value"
+                        class="stepBtn"
+                        aria-label="Increment value" onClick={() => navToLogs()}
                         >Steps
                     </button></div>  
             <div>
               <p>
-                <span className={styles.pulseValue}>{pulse}</span>
+                <span class="pulseValue">{pulse}</span>
                 
-                <span className={styles.calorieValue}>{eatenCals - (exerciseCals + ((count)*0.04)) > 0 ?
-                    eatenCals - (exerciseCals + ((count)*0.04))
+                <span class="calorieValue">{eatenCals - (exerciseCals + ((count)*0.04)) > 0 ?
+                    (eatenCals - (exerciseCals + ((count)*0.04))).toFixed(2)
                     :
-                    (eatenCals - (exerciseCals + ((count)*0.04)))*-1
+                    ((eatenCals - (exerciseCals + ((count)*0.04)))*-1).toFixed(2)
                 }</span>
               </p>
             </div>
@@ -83,10 +95,10 @@ const Main = () => {
                 <p
                     >
                     <button 
-                    className={styles.pulse}
+                    class="pulseBtn"
                     >Pulse
                     </button>
-                    <button className={styles.calories}>
+                    <button class="calBtn">
                         To burn
                     </button>
                 </p>
@@ -94,10 +106,10 @@ const Main = () => {
                 <p
                 >
                     <button 
-                    className={styles.pulse}
+                    class="pulseBtn"
                     >Pulse
                     </button>
-                    <button className={styles.calories}>
+                    <button class="calBtn">
                         To eat
                     </button>
                 </p>
@@ -109,8 +121,8 @@ const Main = () => {
             </div>
 
             <div>  
-            <form className={styles.calorieValue} onSubmit={addCalories}>
-            <input className={styles.calories} 
+            <form class= "calorieValue" onSubmit={addCalories}>
+            <input class="calories"
             placeholder="Enter calories burned" 
             onChange={e =>{setCalsInputText(e.target.value)}}
             value={calsInputText}
@@ -119,13 +131,29 @@ const Main = () => {
             </div>
 
             <div>  
-            <form className={styles.calorieValue} onSubmit={addEatenCalories}>
-            <input className={styles.calories} 
+            <form class="calorieValue" onSubmit={addEatenCalories}>
+            <input class="calories"
             placeholder="Enter calories eaten" 
             onChange={e =>{setEatenCalsInputText(e.target.value)}}
             value={eatenCalsInputText}
             ></input>
             </form>
+            </div>
+            <div class= "positionEvents">
+                <h4 class="eventTxt">Events</h4>
+                {
+                    eventlist.map(event =>
+                        <div>
+                            <h4 class="mainTxt">
+                                <h4 class="eventTxt"> {event[0]} </h4>
+                            
+                            <li>Location: {event[1]}</li>
+                            <li>Date and time: {event[2]}</li>
+                            </h4>
+                        
+                        </div>
+                        )
+                }
             </div>
 
 

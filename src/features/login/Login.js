@@ -6,21 +6,27 @@ import {useDispatch} from 'react-redux';
 import {auth, provider} from '../../firebase/firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories } from '../main/mainSlice';
+import { steps, pulse, excerciseCalories, eatenCalories, eventlist } from '../main/mainSlice';
 import { addAge } from '../profile/profileSlice';
-import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight } from '../profile/profileSlice';
+import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight, addName, addBMR } from '../profile/profileSlice';
 import {create, updateRequests} from '../friends/friendsSlice';
 
 export function Login() {
-    const dispatch = useDispatch();
-    let firstLogin = false;
-    const handleSignIn = () =>{
-        auth.signInWithPopup(provider).then((result)=>{
-        dispatch(setActiveUser({
-            userName: result.user.displayName,
-            userEmail: result.user.email,
-            userId: result.user.uid
-        }))
+  var userName;
+  const dispatch = useDispatch();
+  let firstLogin = false;
+  const handleSignIn = () =>{
+      auth.signInWithPopup(provider).then((result)=>{
+          userName = result.user.displayName
+      dispatch(setActiveUser({
+          userName,
+          userEmail: result.user.email,
+          userId: result.user.uid,
+      }))
+
+       const split = userName.split(" ");
+       const name = split[0]; 
+
         var check = false;
         var newValue;
         const datum = new Date().toLocaleDateString('zh-Hans-CN');
@@ -44,6 +50,8 @@ export function Login() {
                 firebase.database().ref().child("users/" + result.user.uid + "/activityLevel/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/weight/" + datum).set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/goal/").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/name/").set(name);
+                firebase.database().ref().child("users/" + result.user.uid + "/BMR/").set("none");
               }
             console.log(check);}
         );
@@ -135,6 +143,12 @@ export function Login() {
             })
             dispatch(addWeight(newValue))
           })
+          firebase.database().ref().child("users/" + result.user.uid  + "/name").on('value',function(snap){
+            if (snap){
+              newValue= snap.val();
+            }
+            dispatch(addName(newValue));
+          })
           firebase.database().ref().child("users/" + result.user.uid  + "/calories/" + datum + "/intake").on('value',function(snap){
             if (snap){
               newValue= snap.val();
@@ -147,6 +161,19 @@ export function Login() {
             }
             dispatch(excerciseCalories(newValue));
           })
+          firebase.database().ref().child("events").once("value", (snap) => {
+            snap.forEach((childsnap)=>{
+             console.log(childsnap.child("participants").hasChild(result.user.uid));
+                if(childsnap.child("participants").hasChild(result.user.uid)){
+                   
+                    console.log(childsnap.child("eventInfo").val());
+                 Object.values(childsnap.child("eventInfo").val())
+                 dispatch(eventlist(Object.values(childsnap.child("eventInfo").val())))
+                    
+                }
+     
+            });
+        });
           firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
             if (snap){
               newValue= snap.val();
