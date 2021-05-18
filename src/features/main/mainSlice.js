@@ -5,7 +5,8 @@ const initialState = {
   pulse:0,
   calsBurned: 0,
   calsEaten: 0,
-  eventlist: []
+  eventlist: [],
+  allSteps: ""
 }
 
 const mainSlice = createSlice({
@@ -18,6 +19,10 @@ const mainSlice = createSlice({
       steps: (state, action) => {
         
         state.count = action.payload
+      },
+      //replace steps with all steps?
+      allSteps: (state, action) => {
+        state.allSteps = action.payload
       },
       end: (state) => {
         state.count = 0
@@ -35,7 +40,7 @@ const mainSlice = createSlice({
 }
   });
 
-  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist} = mainSlice.actions
+  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist, allSteps} = mainSlice.actions
 
   
 
@@ -44,6 +49,7 @@ const mainSlice = createSlice({
   export const selectEaten = state => state.main.calsEaten
   export const selectExercise = state => state.main.calsBurned
   export const selectEventlist = state => state.main.eventlist
+  export const selectAllSteps = state => state.main.allSteps
 
   
   
