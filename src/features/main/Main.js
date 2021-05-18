@@ -10,10 +10,11 @@ import {
     selectExercise, 
     selectEventlist
   } from './mainSlice';
-  import { selectUserId} from '../login/loginSlice';
-  import {selectName } from '../profile/profileSlice';
+  import { selectUserId, setActiveUser} from '../login/loginSlice';
+  import {selectName, addName } from '../profile/profileSlice';
   import './Popup.css'
   import {useDispatch} from 'react-redux'
+  import {create, updateRequests} from '../friends/friendsSlice';
   import firebase from 'firebase'
   
   const navToLogs = ()=> window.location.hash="logs";
@@ -21,11 +22,11 @@ import {
   let count;
   let eatenCals;
   let exerciseCals;
-  let uName;
   let pulse;
   let name;
   let uid;
   let eventlist;
+  let testBool = false;
 
 const Main = () => {
     const dispatch = useDispatch();
@@ -33,12 +34,9 @@ const Main = () => {
     eatenCals = useSelector(selectEaten);
     exerciseCals = useSelector(selectExercise);
     name = useSelector(selectName);
+    console.log("first check:" + name)
     pulse = useSelector(selectPulse);
     uid = useSelector(selectUserId);
-    if(uName == null){
-        uName = "John";
-        uid = "user1";
-    } 
     eventlist = useSelector(selectEventlist);
     const datum = new Date().toLocaleDateString('zh-Hans-CN');
     firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(count);
@@ -122,7 +120,7 @@ const Main = () => {
 
             <div>  
             <form class= "calorieValue" onSubmit={addCalories}>
-            <input class="calories"
+            <input  id= "calbtn" class="calories"
             placeholder="Enter calories burned" 
             onChange={e =>{setCalsInputText(e.target.value)}}
             value={calsInputText}
@@ -163,5 +161,6 @@ const Main = () => {
 
     )
 };
+
 
 export default Main;
