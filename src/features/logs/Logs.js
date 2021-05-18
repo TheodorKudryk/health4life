@@ -14,22 +14,12 @@ import { axisLeft,
          line,
          scaleTime,
          scaleDivergingPow,
-         timeFormat
+         timeFormat,
+         select,
+         format
         } from "d3";
 import { transform } from 'typescript';
 import { useD3 } from './useD3';
-//import steps data from store and pick out relevant values??
-// create object { date: n, steps: n} ???
-
-const data = [
-    {year: 1980, sales: 25}, 
-    {year: 1985, sales: 30}, 
-    {year: 1989, sales: 45}, 
-    {year: 1999, sales: 60}, 
-    {year: 2000, sales: 20}, 
-    {year: 2010, sales: 80}, 
-    {year: 2017, sales: 25}
-    ]
 
 /*
 const data = [
@@ -402,7 +392,7 @@ const Logs = () => {
             //var minDate = getDate(stepsData[0]["date"]),
             //    maxDate = getDate(stepsData[stepsData.length-1]["date"]);
 
-            // Add X axis --> it is a date format
+            // Add X axis
             var x = scaleTime()
                     .domain(extent(stepsData, function(d) { return d.date; }))
                     //.domain([minDate, maxDate])
@@ -423,7 +413,7 @@ const Logs = () => {
         
             
             var maximum = max(stepsData, (d) => d.steps)
-            console.log(maximum)
+            //console.log(maximum)
 
             // Add Y axis
             var y = scaleLinear()
@@ -457,24 +447,62 @@ const Logs = () => {
                     .x(function(d) { return x(d.date) })
                     .y(function(d) { return y(d.steps) })
                 )
-                .exit()
+                //.exit()
+
+            // the tooltip when hovering over a point
+            var div = select("#mainPart").append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0);
+            
             // Add the points
             svg
                 .append("g")
                 .attr("transform", `translate(${margin.left+10},0)`)
                 .selectAll("dot")
-                //.attr("transform", `translate(${margin.left},0)`)
                 .data(stepsData)
                 .enter()
-                //.attr("transform", `translate(${margin.left},0)`)
                 .append("circle")
-                //.attr("cx", function(d) { return x(d.date) } )
+                .attr("d", stepsData)
                 .attr("cx", (d) => x(d.date) )
                 .attr("cy", (d) => y(d.steps) )
-                //.attr("cy", function(d) { return y(d.steps) } )
                 .attr("r", 5)
                 .attr("fill", "#69b3a2")
-                .exit()
+
+                // Add tooltip on hover ("mouse over")
+                .on("mouseover", function(d, i) {
+                    select(this)
+                        .transition()
+                        .duration("100")
+                        .attr("r", 9);
+                    
+                    div.transition()
+                        .duration(100)
+                        .style("opacity", 1);
+
+                    div.html("Steps: " + d.srcElement.__data__["steps"])
+                        .style("left", (d.pageX + 10) + "px")
+                        .style("top", (d.pageY - 15) + "px");
+                })
+                // Remove tooltip on mouse out
+                .on("mouseout", function() {
+                    select(this)
+                        .transition()
+                        .duration("100")
+                        .attr("r", 5);
+
+                    div.transition()
+                        .duration(100)
+                        .style("opacity", 0);
+                })
+            
+            // Add graph title
+            svg.append("text")
+                .attr("x", (width / 2))
+                .attr("y", (margin.top*1.5))
+                .attr("text-anchor", "right")
+                //.attr("stroke", "white")
+                .attr("fill", "white")
+                .text("Number of steps, last 10 days")
             
             },
             [stepsData.length]
@@ -484,20 +512,10 @@ const Logs = () => {
 
 
     return (<div>
-        <span className={styles.stepText}>Highest step count: <MaxSteps/></span>
-        <div>
-            <svg ref={ref}
-                style={{
-                    height: 500,
-                    width: "100%", //100%
-                    marginRight: "0px",
-                    //marginLeft: "50px",
-                    //paddingLeft: "50px"
-                    }
-                }>
-            </svg>
+        <div className="highestText">Highest step count: <MaxSteps/></div>
+        <div id="mainPart">
+            <svg ref={ref} className="stepsChart"></svg>
         </div>
-        
     </div>
     )
 };

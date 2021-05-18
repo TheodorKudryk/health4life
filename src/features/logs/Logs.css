@@ -1,0 +1,31 @@
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 10px;
+    background: gray;
+    color: white;
+    font-size: 12px;
+    pointer-events: none;
+    border-radius: 2px;
+}
+
+.highestText{
+    width: 200px;
+    font-size: 16px;
+    text-align: center;
+    float: right;
+    padding: 40px;
+    margin: auto;
+    color:#ffffff;
+    border-style: inset;
+}
+
+#mainPart{
+    max-width: 900px;
+}
+
+.stepsChart{
+    height: 500px;
+    width: 100%;
+    margin-right: 0px;
+}
