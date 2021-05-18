@@ -36,8 +36,8 @@ const Main = () => {
     pulse = useSelector(selectPulse);
     uid = useSelector(selectUserId);
     if(uName == null){
-        uName = "Hej";
-
+        uName = "John";
+        uid = "user1";
     } 
     eventlist = useSelector(selectEventlist);
     const datum = new Date().toLocaleDateString('zh-Hans-CN');
