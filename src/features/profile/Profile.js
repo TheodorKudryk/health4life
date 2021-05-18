@@ -10,7 +10,7 @@ import {
     addGoal,
     addEdit,
     addName,
-    calculateBMR,
+    addSuggestedCalories,
     selectBirthdate,
     selectHeight,
     selectSex,
@@ -19,7 +19,7 @@ import {
     selectGoal,
     selectEditing,
     selectName,
-    selectBMR,
+    selectSuggestedCalories,
   } from './profileSlice';
   import { selectUserName, selectUserId } from '../login/loginSlice';
   import firebase from 'firebase';
@@ -32,12 +32,12 @@ const Profile = () => {
     const activityLevel = useSelector(selectActivityLevel);
     const goal = useSelector(selectGoal);
     const name = useSelector(selectName);
-    const BMR = useSelector(selectBMR);
-    const [weightInputText, setWeightInputText] = useState('');
-    const [sexInputText, setSexInputText] = useState('');
-    const [activityLevelInputText, setActivityLevelInputText] = useState('')
-    const [heightInputText, setHeightInputText] = useState('')
-    const [goalInputText, setGoalInputText] = useState('')
+    const suggestedCalories = useSelector(selectSuggestedCalories);
+    const [weightInputText, setWeightInputText] = useState(weight);
+    const [sexInputText, setSexInputText] = useState(sex);
+    const [activityLevelInputText, setActivityLevelInputText] = useState(activityLevel)
+    const [heightInputText, setHeightInputText] = useState(height)
+    const [goalInputText, setGoalInputText] = useState(goal)
     const [birthdateInputText, setBirthdateInputText] = useState(birthdate)
     const [nameInputText, setNameInputText] = useState('')
     const dispatch = useDispatch();
@@ -57,8 +57,10 @@ const Profile = () => {
       dispatch(addHeight(heightInputText));
       copyeditbool[2] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+      const calories = calculate();
+      console.log("Calories " + calories)
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
     const submitSex = e => {
@@ -67,8 +69,9 @@ const Profile = () => {
       dispatch(addSex(sexInputText));
       copyeditbool[3] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+      const calories = calculate();
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
     const submitActivityLevel = e => {
@@ -77,8 +80,9 @@ const Profile = () => {
       dispatch(addActivityLevel(activityLevelInputText));
       copyeditbool[5] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+      const calories = calculate();
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
     const submitGoal = e => {
@@ -87,8 +91,9 @@ const Profile = () => {
       dispatch(addGoal(goalInputText));
       copyeditbool[6] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
+      const calories = calculate();
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
     const submitWeight = e => {
@@ -97,9 +102,9 @@ const Profile = () => {
       dispatch(addWeight(weightInputText));
       copyeditbool[4] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-     // firebase.database().ref('users/' + uid + "/BMR").set(BMR);
-     console.log("BMR weight " + BMR)
+      const calories = calculate();
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
     const submitBirthdate = e => {
@@ -108,9 +113,9 @@ const Profile = () => {
       dispatch(addBirthdate(birthdateInputText));
       copyeditbool[1] = false;
       dispatch(addEdit(copyeditbool));
-      dispatch(calculateBMR())
-      firebase.database().ref('users/' + uid + "/BMR").set(BMR);
-      test();
+      const calories = calculate();
+      dispatch(addSuggestedCalories(calories))
+      firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
 
   const submitName = e => {
@@ -119,6 +124,57 @@ const Profile = () => {
       dispatch(addName(nameInputText));
       copyeditbool[7] = false;
       dispatch(addEdit(copyeditbool));
+    }
+    
+    //The reason for this function being here is because the change in useSelect(selectSuggestedCalories)
+    //doesn't take hold until the submitSomething-function has finished executing, thus sending the 
+    //non-updated value to the database instead of the updated one.
+    const calculate = () => {
+      let calculatedCalories = "none";
+        if (birthdate == "none" || height == "none" || sex == "none" || activityLevel == "none" || goal == "none") {
+          calculatedCalories = "none"
+          console.log("none triggered")
+        } else {
+          const date = new Date();
+          const month = date.getMonth();
+          const year = date.getFullYear();
+          const day = date.getDate();
+          console.log("YEar is " + year)
+          const split = birthdateInputText.split("-");
+          const birthyear = split[0];
+          const age = year - birthyear;
+          console.log("Age is" + age)
+          if (goalInputText == "lose weight") { 
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText-500;
+              console.log("triggered female 1")
+            } else if (sexInputText == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText-500;
+              console.log("triggered male 1")
+            } else if (sexInputText == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText-500;
+            }
+          } else if (goalInputText == "maintain weight") {
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText;
+              console.log("triggered female 2")
+            } else if (sex == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText;
+              console.log("triggered male 2")
+            } else if (sex == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText;
+            }
+          } else if (goalInputText == "gain weight") { 
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText+500;
+            } else if (sexInputText == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText+500;
+            } else if (sex == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText+500;
+            }
+          }
+        }
+      return calculatedCalories.toFixed(0);
     }
 
     var editingAge = false;
@@ -135,14 +191,6 @@ const Profile = () => {
       copyeditbool[number] = true;
       dispatch(addEdit(copyeditbool));
     }
-
-    const test = () => {
-      console.log("BMR IS " + BMR)
-    }
-
-    const calculatedBMR = BMR*activityLevel;
-    const lose = calculatedBMR - 500;
-    const gain = calculatedBMR + 500;
 
     return(
 
@@ -224,11 +272,8 @@ const Profile = () => {
                 </form>) : <></>}
             </div>  <p/><br/>
             <div class={styles.BMR}>
-            Your BMR (basal metabolic rate): {BMR == "none" ? ("not enough profile info to calculate") : (<>{BMR}</>)}
+            Your BMR (basal metabolic rate): {suggestedCalories == "none" ? ("not enough profile info to calculate") : (<>{suggestedCalories}</>)}
             <p/>The BMR is calculated from the Mifflin St-Jeor formula.
-            {activityLevel == "none" ? ("") : (<><p/>Based on your activity level, you burn {calculatedBMR} calories/day</>)}
-            {goal == "none" ? ("") : ("")}
-            {goal == "lose" ? (<>To lose 0.5 kg per week, your daily caloric total sould be {lose}</>) : ("")}
             
             </div>
     </div>

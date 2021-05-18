@@ -13,7 +13,7 @@ const initialState = {
     //name, birthdate, height, sex, weight, activityLevel, goal, name
   editing: [false, false, false, false, false, false, false, false],
   name: "none",
-  BMR: "none"
+  suggestedCalories: "none"
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -61,11 +61,11 @@ export const profileSlice = createSlice({
     addName: (state, action) => {
       state.name = action.payload;
     },
-    addBMR: (state, action) => {
-      state.BMR = action.payload;
-    },
-    calculateBMR: (state) => {
-      if (state.birthdate == "none" || state.height == "none" || state.sex == "none" ) {
+    addSuggestedCalories: (state, action) => {
+      console.log("dispatch " + state.suggestedCalories)
+      state.suggestedCalories = action.payload;
+      console.log("dispatch " + state.suggestedCalories)
+     /* if (state.birthdate == "none" || state.height == "none" || state.sex == "none" ) {
         state.BMR = "none"
         console.log("this triggered")
       } else {
@@ -79,21 +79,21 @@ export const profileSlice = createSlice({
         const age = year - birthyear;
         console.log("Age is" + age) 
         if (state.sex == "female") {
-          state.BMR = 10*state.weight + 6.25*state.height -5*age - 161
+          state.suggestedCalories = (10*state.weight + 6.25*state.height -5*age - 161)*state.activityLevel;
           console.log("triggered female")
         } else if (state.sex == "male") {
 
         } else if (state.sex == "other") {
 
         }
-      }
+      }*/
     },
   }
 });
 
 
 
-export const { addWeight, addBirthdate, addSex, addHeight, addActivityLevel, addGoal, addEdit, addName, calculateBMR, addBMR } = profileSlice.actions;
+export const { addWeight, addBirthdate, addSex, addHeight, addActivityLevel, addGoal, addEdit, addName, addSuggestedCalories } = profileSlice.actions;
 
 
 // The function below is called a selector and allows us to select a value from
@@ -108,7 +108,7 @@ export const selectActivityLevel = (state) => state.profile.activityLevel;
 export const selectGoal = (state) => state.profile.goal;
 export const selectEditing = (state) => state.profile.editing;
 export const selectName = (state) => state.profile.name;
-export const selectBMR = (state) => state.profile.BMR;
+export const selectSuggestedCalories = (state) => state.profile.suggestedCalories;
 
 
 export default profileSlice.reducer;
