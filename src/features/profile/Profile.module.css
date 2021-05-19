@@ -1,0 +1,93 @@
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .row > button {
+    margin-left: 4px;
+    margin-right: 8px;
+  }
+  .row:not(:last-child) {
+    margin-bottom: 16px;
+  }
+  
+  .value {
+    font-size: 78px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 2px;
+    font-family: Impact, Courier, Fantasy;
+    color:#ffffff;
+  }
+  
+  .textbox {
+    font-size: 32px;
+    padding: 2px;
+    width: 64px;
+    text-align: center;
+    margin-right: 4px;
+  }
+
+  .button {
+    appearance: none;
+    background: none;
+    font-size: 32px;
+    padding-left: 12px;
+    padding-right: 12px;
+    outline: none;
+    border: 2px solid transparent;
+    padding-bottom: 4px;
+    cursor: pointer;
+    background-color: rgba(112, 76, 182, 0.1);
+    border-radius: 2px;
+    transition: all 0.15s;
+    font-family: Impact, Courier, Fantasy;
+  }
+
+
+.profileTitle{
+    font-size: 78px;
+    padding-left: 350px;
+    padding-right: 150px;
+    margin-top: 2px;
+    font-family: Impact, Courier, Fantasy;
+    color: #ffffff;
+}
+
+.profile{
+    float: left;
+}
+
+.profileforms{
+    padding-left: 280px;
+    padding-right: 70px;
+    margin-top: 30px;
+    color: #ffffff;
+    text-align: left;
+}
+
+.profileName{
+    display:none;
+}
+
+input, select, textarea {
+  width:180px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.editButton{
+  float: right;
+}
+
+.BMR{
+  width: 500px;
+  padding-left: 230px;
+    margin-top: 30px;
+    margin-bottom: 70px;
+    color: #ffffff;
+}
+
+

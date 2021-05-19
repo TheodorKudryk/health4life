@@ -132,11 +132,13 @@ const Friends = () => {
     return (
         <div className="friends">
            <form onSubmit={handleSearch}>
-            <input onChange={e=>{setInputText(e.target.value)}} value={inputText} />
+            <input id="search" onChange={e=>{setInputText(e.target.value)}} value={inputText} />
             <button type='submit'>Search</button>
            </form>
            <br/>
-           {searchResult.length === 0 ? message : <div>{searchResult[0]} <button onClick={handleSendRequest}>Add</button></div>}
+           <div id="searchResult">
+            {searchResult.length === 0 ? message : <div>{searchResult[0]} <button onClick={handleSendRequest}>Add</button></div>}
+           </div>
            <br/>
            <br/>
            <br/>

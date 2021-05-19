@@ -1,44 +1,60 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchCount } from '../counter/counterAPI';
+import { createSlice } from '@reduxjs/toolkit'
+
 const initialState = {
-  value: 0,
-  status: 'idle',
-  count: 0
-};
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched. Thunks are
-// typically used to make async requests.
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
-  async (amount) => {
-    const response = await fetchCount(amount);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
+  count:0,
+  pulse:0,
+  calsBurned: 0,
+  calsEaten: 0,
+  eventlist: [],
+  allSteps: ""
+}
 
-export const mainSlice = createSlice({
-  name: 'counter',
+const mainSlice = createSlice({
+  name: 'main',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
-    }
-  }
-});
+      pulse: (state, action)=>{
+      state.pulse = action.payload
+  },
+      steps: (state, action) => {
+        
+        state.count = action.payload
+      },
+      //replace steps with all steps?
+      allSteps: (state, action) => {
+        state.allSteps = action.payload
+      },
+      end: (state) => {
+        state.count = 0
+      },
+      excerciseCalories: (state, action) =>{
+        state.calsBurned = action.payload
+      },
+      eatenCalories: (state, action) =>{
+        state.calsEaten = action.payload
+      },
+      eventlist: (state, action) => {
+        state.eventlist.push(action.payload)
+      },
+      clearEvent: (state) => {
+        state.eventlist.splice(0, state.eventlist.length)
+        console.log(state.eventlist);
+      }
+      
+}
+  });
 
-export const { increment } = mainSlice.actions;
+  export const {pulse, steps, end, excerciseCalories, eatenCalories, eventlist, allSteps, clearEvent} = mainSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectCount = (state) => state.counter.value;
+  
 
-export default mainSlice.reducer;
+  export const selectValue = state => state.main.count
+  export const selectPulse = state => state.main.pulse
+  export const selectEaten = state => state.main.calsEaten
+  export const selectExercise = state => state.main.calsBurned
+  export const selectEventlist = state => state.main.eventlist
+  export const selectAllSteps = state => state.main.allSteps
+
+  
+  
+  export default mainSlice.reducer
