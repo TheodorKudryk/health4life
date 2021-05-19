@@ -39,7 +39,7 @@ export function Login() {
                 window.location.hash="popup";
                 firebase.database().ref().child("users/" + result.user.uid + "/email").set(result.user.email);
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
-                firebase.database().ref().child("users/" + result.user.uid + "/pulse/" + datum).set(100);
+                firebase.database().ref().child("users/" + result.user.uid + "/pulse/").set(100);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/intake").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedSteps").set(0);
@@ -98,7 +98,7 @@ export function Login() {
             }
             dispatch(addBirthdate(newValue));
           })
-          firebase.database().ref().child("users/" + result.user.uid  + "/pulse/" + datum).on('value',function(snap){
+          firebase.database().ref().child("users/" + result.user.uid  + "/pulse").on('value',function(snap){
             if (snap){
               newValue= snap.val();
             }
