@@ -1,6 +1,12 @@
-const Friends = require('./Friends')
+import {Builder, By, Key} from "selenium-webdriver";
 
-test('Remove friend', () => {
-    expect(3).toBe(3)
-    //Friends.handleRemove()
-})
+async function testFriends(){
+    let driver = await new Builder().forBrowser("chrome").build();
+
+    await driver.get("http://localhost:3000/#friends");
+    
+    await driver.findElement(By.id("search")).sendKeys("user1");
+
+}
+
+testFriends();

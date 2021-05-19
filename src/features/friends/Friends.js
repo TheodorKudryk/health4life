@@ -132,7 +132,7 @@ const Friends = () => {
     return (
         <div className="friends">
            <form onSubmit={handleSearch}>
-            <input onChange={e=>{setInputText(e.target.value)}} value={inputText} />
+            <input id="search" onChange={e=>{setInputText(e.target.value)}} value={inputText} />
             <button type='submit'>Search</button>
            </form>
            <br/>
