@@ -171,17 +171,17 @@ const Friends = () => {
            <br/>
            <br/>
            <br/>
-           {editCreateEvent ? <></> : <button onClick={() => setEditCreateEvent(!editCreateEvent)}>Create event</button>}
+           {editCreateEvent ? <></> : <button id="createEventBtn" onClick={() => setEditCreateEvent(!editCreateEvent)}>Create event</button>}
            {editCreateEvent ? 
                 <div>
-                    Description<input onChange={e =>setEventDescription(e.target.value)} value={eventDescription}/>
+                    Description<input id="eventDescr" onChange={e =>setEventDescription(e.target.value)} value={eventDescription}/>
                     <br/>
-                    Time<input onChange={e =>setEventTime(e.target.value)} value={eventTime} pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" placeholder="YYYY-MM-DD TT:TT"/>
+                    Time<input id="eventTime" onChange={e =>setEventTime(e.target.value)} value={eventTime} pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" placeholder="YYYY-MM-DD TT:TT"/>
                     <br/>
-                    Location<input onChange={e =>setEventLocation(e.target.value)} value={eventLocation}/>
+                    Location<input id="eventLoc" onChange={e =>setEventLocation(e.target.value)} value={eventLocation}/>
                     <br/>
                     <button onClick={createEvent}>Create event</button>
-                    <button onClick={() => {resetEvent();setEditCreateEvent(false)}}>stop edit</button>
+                    <button id="stopEventBtn" onClick={() => {resetEvent();setEditCreateEvent(false)}}>stop edit</button>
                 </div>
             : <></>}
         </div>
