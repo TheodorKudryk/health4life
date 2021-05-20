@@ -50,7 +50,7 @@ export function Login() {
                 firebase.database().ref().child("users/" + result.user.uid + "/weight/" + datum).set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/goal/").set("none");
                 firebase.database().ref().child("users/" + result.user.uid + "/name/").set(name);
-                firebase.database().ref().child("users/" + result.user.uid + "/suggestedCalories/").set("none");
+                firebase.database().ref().child("users/" + result.user.uid + "/suggestedCalories/").set(0);
               }
             console.log(check);}
         );
