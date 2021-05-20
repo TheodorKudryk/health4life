@@ -20,45 +20,56 @@ const Logs = () => {
     const dispatch = useDispatch()
     const days = useSelector(selectNumOfDays)
     let newDay;
-    
+
     const submitNumOfDays = e => {
         dispatch(numOfDays(newDay))
     }
 
+    const stepsFromFB = useSelector(selectAllSteps);
+    const stepsExist = (stepsFromFB != '') ? true : false
+    
     // Shows the maximum amount of steps a user has taken
     const MaxSteps = e => {
+        let maxSteps = 0;
+
         const stepsFromFB = useSelector(selectAllSteps);
+        const stepsExist = (stepsFromFB != '') ? true : false
+
         let stepsData = []
+        if(stepsExist){
+            
     
-        for(let months in stepsFromFB){
-            for(let days in stepsFromFB[months]){
-                for(let steps in stepsFromFB[months][days]){
-                    stepsData.push(stepsFromFB[months][days][steps])
+            for(let months in stepsFromFB){
+                for(let days in stepsFromFB[months]){
+                    for(let steps in stepsFromFB[months][days]){
+                        stepsData.push(stepsFromFB[months][days][steps])
+                    }
                 }
             }
+
+            stepsData.sort((a,b) => {return a-b})
+            maxSteps = stepsData[stepsData.length -1]
         }
-
-        stepsData.sort((a,b) => {return a-b})
-
+        
         return(
-            <span>{stepsData[stepsData.length -1]}</span>
+            <span>{maxSteps}</span>
         )
-    
     }
-
-    const stepsFromFB = useSelector(selectAllSteps);
+    
     let stepsData = []
     const today = new Date();
 
-    for(let i = 0; i < days; i++){
-        const year = today.getFullYear()
-        const month = (today.getMonth() +1)
-        const day = today.getDate()
+    if(stepsExist){
+        for(let i = 0; i < days; i++){
+            const year = today.getFullYear()
+            const month = (today.getMonth() +1)
+            const day = today.getDate()
         
-        stepsData.push({date: new Date(year, month, day), 
+            stepsData.push({date: new Date(year, month, day), 
                         steps: stepsFromFB[String(year)][String(month)][String(day)]
-                    })
-        today.setDate(today.getDate() -1)
+                        })
+            today.setDate(today.getDate() -1)
+        }
     }
     stepsData = stepsData.filter(d => d.steps !== undefined)
 
@@ -116,7 +127,6 @@ const Logs = () => {
                 .x(function(d) { return x(d.date) })
                 .y(function(d) { return y(d.steps) })
             )
-
                 
         // the tooltip when hovering over a point
         var div = select("#mainPart").append("div")
@@ -179,24 +189,25 @@ const Logs = () => {
         
         },
         [stepsData.length]
+    
     );
 
     return (<div>
         <div className="highestText">Highest step count: <MaxSteps/></div>
         <div id="mainPart">
-            <svg ref={ref} className="stepsChart" />
-            <div className="chartOptions">
+            <svg ref={ref} className="stepsChart" display={(!stepsExist) ? "none" : "inline"}/>
+            <div className="chartOptions" >
                 <form className="chartOptionsForm">
                     <label htmlFor="days">Show number of steps for the last...</label>
 
-                    <select className="chartDropDown" name="numberOfDays" id="days" 
+                    <select className="chartDropDown" name="numberOfDays" id="days"
                         defaultValue={days} onChange={e => {
                             newDay=e.target.value;
                             submitNumOfDays();
                             }}>
-                        <option value={3}>3 days</option>
-                        <option value={7}>7 days</option>
-                        <option value={10}>10 days</option>
+                        <option id="optionThree" value={3}>3 days</option>
+                        <option id="optionSeven" value={7}>7 days</option>
+                        <option id="optionTen" value={10}>10 days</option>
                     </select>
                 </form>
             </div>
