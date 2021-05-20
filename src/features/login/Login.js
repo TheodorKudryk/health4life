@@ -6,7 +6,7 @@ import './Login.css';
 import pic from './app.png'
 import { steps, pulse, exerciseCalories, eatenCalories, eventlist, allSteps } from '../main/mainSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight, addName, addSuggestedCalories } from '../profile/profileSlice';
-import {create, updateRequests} from '../friends/friendsSlice';
+import {updateFriends, updateRequests} from '../friends/friendsSlice';
 
 
 export function Login() {
@@ -82,7 +82,7 @@ export function Login() {
         //  ------------------------------------------FRIENDS-------------------------------------------------------------------
         firebase.database().ref().child("users/" + result.user.uid  + "/friends/friendList").on('value',function(snap){
             if (snap)
-                dispatch(create(snap.val()));
+                dispatch(updateFriends(snap.val()));
         });
         firebase.database().ref().child("users/" + result.user.uid  + "/friends/requestsReceived").on('value',function(snap){
             if (snap)

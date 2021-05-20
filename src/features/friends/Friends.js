@@ -47,15 +47,16 @@ const Friends = () => {
                         }
                     }
                     
-                    if (user.val().friends.requestsReceived) {
-                        for(var id of Object.entries(user.val().friends.requestsReceived)) {
-                            console.log(id[0], id === uid)
-                            if (id[0] === uid) {
-                                setMessage("Friend request has already been sent to " + user.val().name);
-                                return;
-                            }
+                    if (user.val().friends != null)
+                        if (user.val().friends.requestsReceived) {
+                            for(var id of Object.entries(user.val().friends.requestsReceived)) {
+                                console.log(id[0], id === uid)
+                                if (id[0] === uid) {
+                                    setMessage("Friend request has already been sent to " + user.val().name);
+                                    return;
+                                }
+                            };
                         };
-                    };
                     
                     setSearchResult([user.val().email,user.val().name,user.key]);
                     setMessage('')
