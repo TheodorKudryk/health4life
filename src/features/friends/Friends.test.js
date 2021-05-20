@@ -4,14 +4,24 @@ async function testFriends(){
     let driver = await new Builder().forBrowser("chrome").build();
 
     await driver.get("http://localhost:3000/#friends");
-    
-    await driver.findElement(By.id("search")).sendKeys("anna.hi@mail.com",Key.RETURN);
 
-    driver.sleep(2000);
+    driver.sleep(1000);
 
     await driver.findElement(By.id("search")).sendKeys("abc",Key.RETURN);
 
+    driver.sleep(2000);
+
+    await driver
+        .findElement(By.id("search"))
+        .clear();
+    
+    await driver.findElement(By.id("search")).sendKeys("anna.hi@mail.com");
+
     driver.sleep(1000);
+
+    await driver.findElement(By.id("search")).sendKeys(Key.RETURN);
+
+    driver.sleep(2000);
 
     await driver
         .findElement(By.id("createEventBtn"))
