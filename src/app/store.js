@@ -3,6 +3,7 @@ import loginReducer from '../features/login/loginSlice';
 import friendsReducer from '../features/friends/friendsSlice';
 import mainReducer from '../features/main/mainSlice';
 import profileReducer from '../features/profile/profileSlice';
+import logsReducer from '../features/logs/logsSlice';
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     user: loginReducer,
     friends: friendsReducer,
     main: mainReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    logs: logsReducer
   },
 });
 
