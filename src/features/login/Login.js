@@ -38,7 +38,7 @@ export function Login() {
                 window.location.hash="popup";
                 firebase.database().ref().child("users/" + result.user.uid + "/email").set(result.user.email);
                 firebase.database().ref().child("users/" + result.user.uid + "/steps/" + datum).set(0);
-                firebase.database().ref().child("users/" + result.user.uid + "/pulse/").set(100);
+                firebase.database().ref().child("users/" + result.user.uid + "/pulse/").set(75);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedExercise").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/intake").set(0);
                 firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum + "/burnedSteps").set(0);
@@ -103,7 +103,7 @@ export function Login() {
               newValue= snap.val();
             }
             if(newValue == null){
-              newValue=0;
+              newValue=75;
             }
             dispatch(pulse(newValue));
           })
