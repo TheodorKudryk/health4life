@@ -273,9 +273,7 @@ const Profile = () => {
                 </form>) : <></>}
             </div>  <p/><br/>
             <div class={styles.BMR}>
-            Your BMR (basal metabolic rate): {calculate().toFixed(0) == 0 ? ("not enough profile info to calculate") : (<>{calculate().toFixed(0)}</>)}
-            <p/>The BMR is calculated from the Mifflin St-Jeor formula.
-            
+            {calculate().toFixed(0) == 0 ? ("To get your recommended daily caloric intake, please enter your data.") : (<>Your recommended daily caloric intake is {calculate().toFixed(0)} calories.</>)}   
             </div>
     </div>
     )
