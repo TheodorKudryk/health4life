@@ -45,11 +45,7 @@ const Profile = () => {
     const editbool = useSelector(selectEditing);
     const copyeditbool = editbool.slice();
 
-
-
     const date = new Date().toLocaleDateString('zh-Hans-CN');
-
-
 
     const submitHeight = e => {
       e.preventDefault();
@@ -226,19 +222,19 @@ const Profile = () => {
             </div>
 
             <div class={styles.profileforms}>
-          Your sex: {sex}<button class={styles.editButton} onClick={e=>toggleEdit(3, e)}>Edit</button>
+          Your sex: {sex}<button class={styles.editButton} onClick={e=>toggleEdit(3, e)} id="sexBtn">Edit</button>
             {editbool[3] ? ( <form onSubmit={submitSex}>
-              <select onChange={e=>setSexInputText(e.target.value)}>
+              <select onChange={e=>setSexInputText(e.target.value)} id="sexSelect">
                 <option value="none">--none selected--</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="male" id="male">Male</option>
+                <option value="female" id="female">Female</option>
+                <option value="other" id="other">Other</option>
                 </select>
-                <button type="submit">Update</button>
+                <button type="submit" id="sexBtnSubmit">Update</button>
                 </form>) : <></>}
             </div>
 
-             <div class={styles.profileforms}>
+            <div class={styles.profileforms}>
             Your weight: {weight == "none" ? "none":<>{weight} kg</>}<button class={styles.editButton} id="weightBtn" onClick={e=>toggleEdit(4, e)}>Edit</button>
             {editbool[4] ? (<form onSubmit={submitWeight}>
                <input id="weightInput" onChange={e =>setWeightInputText(e.target.value)} 
@@ -247,34 +243,35 @@ const Profile = () => {
             </div>
 
             <div class={styles.profileforms}>
-          Your activity level: {activityLevel}<button class={styles.editButton} onClick={e=>toggleEdit(5, e)}>Edit</button>
+          Your activity level: {activityLevel}<button class={styles.editButton} onClick={e=>toggleEdit(5, e)} id="activityLevelBtn">Edit</button>
             {editbool[5] ? ( <form onSubmit={submitActivityLevel}>
-              <select onChange={e=>setActivityLevelInputText(e.target.value)}>
+              <select onChange={e=>setActivityLevelInputText(e.target.value)} id="activityLevelSelect">
                 <option value="none">--none selected--</option>
-                <option value="1.2">Little exercise or sedentary</option>
-                <option value="1.375">Exercise 1-3 times/week</option>
-                <option value="1.55">Exercise 3-5 times/week</option>
-                <option value="1.725">Exercise 6-7 times/week</option>
-                <option value="1.9">Hard training or physical job</option>
+                <option value="1.2" id="1.2">Little exercise or sedentary</option>
+                <option value="1.375" id="1.375">Exercise 1-3 times/week</option>
+                <option value="1.55"id="1.55">Exercise 3-5 times/week</option>
+                <option value="1.725" id="1.725">Exercise 6-7 times/week</option>
+                <option value="1.9" id="1.9">Hard training or physical job</option>
                 </select>
-                <button type="submit">Update</button>
+                <button type="submit" id="activityLevelBtnSubmit">Update</button>
                 </form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
-          Your weight goal: {goal}<button class={styles.editButton} onClick={e=>toggleEdit(6, e)}>Edit</button>
+          Your weight goal: {goal}<button class={styles.editButton} onClick={e=>toggleEdit(6, e)} id="goalBtn">Edit</button>
             {editbool[6] ? ( <form onSubmit={submitGoal}>
               <select onChange={e=>setGoalInputText(e.target.value)}>
                 <option value="none">--none selected--</option>
-                <option value="lose weight">Lose weight</option>
-                <option value="maintain weight">Maintain weight</option>
-                <option value="gain weight">Gain weight</option>
+                <option value="lose weight" id="lose">Lose weight</option>
+                <option value="maintain weight" id="maintain">Maintain weight</option>
+                <option value="gain weight" id="gain">Gain weight</option>
                 </select>
-                <button type="submit">Update</button>
+                <button type="submit" id="goalBtnSubmit">Update</button>
                 </form>) : <></>}
             </div>  <p/><br/>
             <div class={styles.BMR}>
-            {calculate().toFixed(0) == 0 ? ("To get your recommended daily caloric intake, please enter your data.") : (<>Your recommended daily caloric intake is {calculate().toFixed(0)} calories.</>)}   
+            {calculate().toFixed(0) == 0 ? ("To get your recommended daily caloric intake, please enter your data.") : (<>Your recommended daily caloric intake is {calculate().toFixed(0)} calories.</>)}
+    
             </div>
     </div>
     )
