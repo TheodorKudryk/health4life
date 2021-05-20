@@ -2,7 +2,7 @@ div.tooltip {
     position: absolute;
     text-align: center;
     padding: 10px;
-    background: gray;
+    background: rgb(94, 94, 94);
     color: white;
     font-size: 12px;
     pointer-events: none;
@@ -16,6 +16,7 @@ div.tooltip {
     float: right;
     padding: 40px;
     margin: auto;
+    margin-right: 20px;
     color:#ffffff;
     border-style: inset;
 }
@@ -28,4 +29,15 @@ div.tooltip {
     height: 500px;
     width: 100%;
     margin-right: 0px;
+    margin-left: 20px;
+}
+
+.chartOptions{
+    max-width: 500px;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.chartDropDown{
+    margin-left: 15px;
 }
