@@ -1,20 +1,19 @@
 import firebase from 'firebase';
-import {
-    setActiveUser
-} from './loginSlice';
+import { setActiveUser} from './loginSlice';
 import {useDispatch} from 'react-redux';
-import {auth, provider} from '../../firebase/firebase';
+import {auth, provider} from '../../firebase';
 import './Login.css';
 import pic from './app.png'
-import { steps, pulse, excerciseCalories, eatenCalories, eventlist, allSteps } from '../main/mainSlice';
-import { addAge } from '../profile/profileSlice';
+import { steps, pulse, exerciseCalories, eatenCalories, eventlist, allSteps } from '../main/mainSlice';
 import { addBirthdate, addHeight, addSex, addActivityLevel, addGoal, addWeight, addName, addSuggestedCalories } from '../profile/profileSlice';
 import {create, updateRequests} from '../friends/friendsSlice';
+
 
 export function Login() {
   var userName;
   const dispatch = useDispatch();
   let firstLogin = false;
+
   const handleSignIn = () =>{
       auth.signInWithPopup(provider).then((result)=>{
           userName = result.user.displayName
@@ -55,6 +54,7 @@ export function Login() {
               }
             console.log(check);}
         );
+        
         firebase.database().ref().child("users/" + result.user.uid + "/calories/" + datum).once("value")
         .then(function(snapshot) {
           check = snapshot.hasChild("burnedExercise");
@@ -165,7 +165,7 @@ export function Login() {
             if (snap){
               newValue= snap.val();
             }
-            dispatch(excerciseCalories(newValue));
+            dispatch(exerciseCalories(newValue));
           })
           firebase.database().ref().child("events").once("value", (snap) => {
             snap.forEach((childsnap)=>{
@@ -180,14 +180,15 @@ export function Login() {
      
             });
         });
-
         
+
         firebase.database().ref().child("users/" + result.user.uid  + "/steps/").on('value',function(snap){
           if (snap){
             newValue= snap.val();
           }
           dispatch(allSteps(newValue));
         })
+        
 
 
           firebase.database().ref().child("users/" + result.user.uid  + "/steps/" + datum).on('value',function(snap){
@@ -209,6 +210,8 @@ export function Login() {
         
 
     }
+
+    
     return (
         <div>
             <div class="split left">

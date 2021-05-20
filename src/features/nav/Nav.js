@@ -1,5 +1,5 @@
 import './nav.css';
-import {auth} from '../../firebase/firebase';
+import {auth} from '../../firebase';
 import {useDispatch} from 'react-redux';
 import {setUserLogOutState} from '../login/loginSlice';
 import {end} from '../main/mainSlice';

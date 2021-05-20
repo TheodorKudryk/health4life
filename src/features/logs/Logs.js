@@ -121,7 +121,6 @@ const Logs = () => {
                         today.setDate(today.getDate() -1)
                     }
                     stepsData = stepsData.filter(d => d.steps !== undefined)
-
                     console.log(stepsData)
                     
                 }
@@ -134,14 +133,11 @@ const Logs = () => {
 
     //const svgRef = useRef();
     /* below is d3 with react hooks
-
     const svgRef = useRef();
     const svg = select(svgRef.current)
-
     const xScale = scaleLinear()
         .domain([0, data.length - 1])
         .range([0, 200]) // 1st value start at px 0, last at 300 (fr l to r)
-
     const yScale = scaleLinear()
         .domain([0, 80]) // bc input vals in arr go up to 80
         .range([150, 0]); // map first val to bttm ??? (150px from top)
@@ -150,18 +146,15 @@ const Logs = () => {
     svg.select(".x-axis")
         .style("transform", "translateY(150px)")
         .call(xAxis);
-
     const yAxis = axisRight(yScale);
     svg.select(".y-axis")
         .style("transform", "translateY(300px)")
         .call(yAxis);
-
     const myLine = line()
         .x((value, index) => xScale(index))
         .y(yScale) // value => yScale(value)
         .curve(curveCardinal)
         
-
     svg.selectAll(".line").data([data])
         .join("path")
         .attr("class", "line")
@@ -172,19 +165,16 @@ const Logs = () => {
 
     /*firebase.database().ref().child("users/" + uid + "/steps/2021/5")
         .once("value", function(snapshot)){
-
         }
     var topSteps = stepsRef.orderByValue().limitToFirst(1).getValue();
     console.log(topSteps);*/
 
     
         /* from d3 scatterplot
-
     // set the dimensions and margins of the graph
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
         width = 460 - margin.left - margin.right, // 370
         height = 400 - margin.top - margin.bottom; // 360
-
         
     // append the svg object to the body of the page
     let svg = select(svgRef.current)
@@ -194,7 +184,6 @@ const Logs = () => {
         .append("g")
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
-
     // Add X axis
     let x = scaleLinear()
         .domain([0, 100])
@@ -202,14 +191,12 @@ const Logs = () => {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(axisBottom(x));
-
     // Add Y axis
     let y = scaleLinear()
         .domain([0, 100])
         .range([ height, 0]);
     svg.append("g")
         .call(axisLeft(y));
-
     // Add dots
     svg.append('g')
         .selectAll("dot")
@@ -228,7 +215,6 @@ const Logs = () => {
             (svg) => {
               
             /* from using d3.js inside react
-
               const height = 500;
               const width = 500;
               const margin = { top: 20, right: 30, bottom: 30, left: 40 };
@@ -269,8 +255,6 @@ const Logs = () => {
         
               svg.select(".x-axis").call(xAxis);
               svg.select(".y-axis").call(y1Axis);
-
-
                     svg
                     .select(".plot-area")
                     .attr("fill", "none")
@@ -296,7 +280,6 @@ const Logs = () => {
                     ;
                     //.attr("y", (d) => y1(d.sales))
                     
-
                     svg
                     .select(".plot-area")
                     .attr("fill", "steelblue") //"steelblue"
@@ -316,12 +299,10 @@ const Logs = () => {
 
 
                     /* from basic connected scatter plot (WORKS)
-
                     // set the dimensions and margins of the graph
                     var margin = {top: 10, right: 30, bottom: 30, left: 60},
                         width = 460 - margin.left - margin.right,
                         height = 400 - margin.top - margin.bottom;
-
                     // append the svg object to the body of the page
                     svg.select("svg")
                                 .append("svg")
@@ -330,7 +311,6 @@ const Logs = () => {
                                 .append("g")
                                 .attr("transform",
                                     "translate(" + margin.left + "," + margin.top + ")");
-
                     // Add X axis --> it is a date format
                     var x = scaleLinear()
                             .domain(extent(data, function(d) { return d.year; }))
@@ -369,7 +349,6 @@ const Logs = () => {
                         .attr("r", 5)
                         .attr("fill", "#69b3a2")
                     
-
                         */
 
 

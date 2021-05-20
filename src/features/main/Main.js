@@ -4,17 +4,16 @@ import './Main.css';
 import {
     selectPulse,
     selectValue, 
-    excerciseCalories,
+    exerciseCalories,
     eatenCalories, 
     selectEaten, 
     selectExercise, 
     selectEventlist
   } from './mainSlice';
-  import { selectUserId, setActiveUser} from '../login/loginSlice';
-  import {selectName, addName } from '../profile/profileSlice';
+  import { selectUserId} from '../login/loginSlice';
+  import {selectName} from '../profile/profileSlice';
   import './Popup.css'
   import {useDispatch} from 'react-redux'
-  import {create, updateRequests} from '../friends/friendsSlice';
   import firebase from 'firebase'
   
   const navToLogs = ()=> window.location.hash="logs";
@@ -27,6 +26,7 @@ import {
   let uid;
   let eventlist;
   let testBool = false;
+  let startCalories;
 
 const Main = () => {
     const dispatch = useDispatch();
@@ -39,15 +39,27 @@ const Main = () => {
     uid = useSelector(selectUserId);
     eventlist = useSelector(selectEventlist);
     const datum = new Date().toLocaleDateString('zh-Hans-CN');
+
     firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedSteps").set(count);
 
    const [calsInputText,setCalsInputText] = useState('');
    const [eatenCalsInputText,setEatenCalsInputText] = useState('');
    console.log(eventlist);
+   if(useSelector(state => state.main.calsBurned) == null){testBool = true}
+   console.log(testBool)
    const addCalories = (e)=>{
         e.preventDefault();
         let temp = parseFloat(exerciseCals + parseFloat(calsInputText));
-        dispatch(excerciseCalories(temp));
+        if(testBool){
+            testBool = false
+            firebase.database().ref().child("users/" + uid + "/suggestedCalories").on("value", function(snap){
+                if(snap){
+                    startCalories = snap.val();
+                    temp = parseFloat(exerciseCals + parseFloat(startCalories))
+                }
+            })
+        }
+        dispatch(exerciseCalories(temp));
         firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/burnedExercise").set(temp);
         setCalsInputText('');
     }
@@ -59,9 +71,7 @@ const Main = () => {
         firebase.database().ref().child("users/" + uid + "/calories/" + datum + "/intake").set(temp);
         setEatenCalsInputText('');
     }
-
     
-
     return(
         <div class= "body"> 
             <div class= "overLay">
