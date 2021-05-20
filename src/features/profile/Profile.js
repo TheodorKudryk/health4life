@@ -232,13 +232,14 @@ const Profile = () => {
                 <option value="none">--none selected--</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
+                <option value="other">Other</option>
                 </select>
                 <button type="submit">Update</button>
                 </form>) : <></>}
             </div>
 
-            <div class={styles.profileforms}>
-          Your weight: {weight}<button class={styles.editButton} id="weightBtn" onClick={e=>toggleEdit(4, e)}>Edit</button>
+             <div class={styles.profileforms}>
+            Your weight: {weight == "none" ? "none":<>{weight} kg</>}<button class={styles.editButton} id="weightBtn" onClick={e=>toggleEdit(4, e)}>Edit</button>
             {editbool[4] ? (<form onSubmit={submitWeight}>
                <input id="weightInput" onChange={e =>setWeightInputText(e.target.value)} 
                value={weightInputText} placeholder="   kg"/>
