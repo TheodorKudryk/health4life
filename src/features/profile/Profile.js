@@ -49,52 +49,7 @@ const Profile = () => {
 
     const date = new Date().toLocaleDateString('zh-Hans-CN');
 
-    const calculate = () => {
-      let calculatedCalories = "none";
-        if (birthdate === "none" || height === "none" || sex === "none" || activityLevel === "none" || goal === "none") {
-          calculatedCalories = "none"
-          console.log("none triggered")
-        } else {
-          const date = new Date();
-          const year = date.getFullYear();
-          const split = birthdateInputText.split("-");
-          const birthyear = split[0];
-          const age = year - birthyear;
-          console.log("Age is" + age)
-          if (goalInputText === "lose weight") { 
-            if (sexInputText === "female") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText-500;
-              console.log("triggered female 1")
-            } else if (sexInputText === "male") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText-500;
-              console.log("triggered male 1")
-            } else if (sexInputText === "other") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText-500;
-            }
-          } else if (goalInputText === "maintain weight") {
-            if (sexInputText === "female") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText;
-              console.log("triggered female 2")
-            } else if (sex === "male") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText;
-              console.log("triggered male 2")
-            } else if (sex === "other") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText;
-            }
-          } else if (goalInputText === "gain weight") { 
-            if (sexInputText === "female") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText+500;
-            } else if (sexInputText === "male") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText+500;
-            } else if (sex === "other") {
-              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText+500;
-            }
-          }
-        }
-        console.log(parseFloat(calculatedCalories).toFixed(0))
-      return parseFloat(calculatedCalories).toFixed(0);
-    }
-    const calories = calculate();
+
 
     const submitHeight = e => {
       e.preventDefault();
@@ -158,7 +113,7 @@ const Profile = () => {
       dispatch(addBirthdate(birthdateInputText));
       copyeditbool[1] = false;
       dispatch(addEdit(copyeditbool));
-      
+      const calories = calculate();
       dispatch(addSuggestedCalories(calories))
       firebase.database().ref('users/' + uid + "/suggestedCalories").set(calories);
     }
@@ -174,9 +129,62 @@ const Profile = () => {
     //The reason for this function being here is because the change in useSelect(selectSuggestedCalories)
     //doesn't take hold until the submitSomething-function has finished executing, thus sending the 
     //non-updated value to the database instead of the updated one.
+    const calculate = () => {
+      let calculatedCalories = 0;
+        if (birthdateInputText == "none" || heightInputText == "none" || sexInputText == "none" || activityLevelInputText == "none" || goalInputText == "none") {
+          calculatedCalories = 0;
+          console.log("none triggered")
+        } else {
+          const date = new Date();
+          const month = date.getMonth();
+          const year = date.getFullYear();
+          const day = date.getDate();
+          console.log("YEar is " + year)
+          const split = birthdateInputText.split("-");
+          const birthyear = split[0];
+          const age = year - birthyear;
+          console.log("Age is" + age)
+          if (goalInputText == "lose weight") { 
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText-500;
+              console.log("triggered female 1")
+            } else if (sexInputText == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText-500;
+              console.log("triggered male 1")
+            } else if (sexInputText == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText-500;
+            }
+          } else if (goalInputText == "maintain weight") {
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText;
+              console.log("triggered female 2")
+            } else if (sex == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText;
+              console.log("triggered male 2")
+            } else if (sex == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText;
+            }
+          } else if (goalInputText == "gain weight") { 
+            if (sexInputText == "female") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 161)*activityLevelInputText+500;
+            } else if (sexInputText == "male") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age + 5)*activityLevelInputText+500;
+            } else if (sex == "other") {
+              calculatedCalories = (10*weightInputText + 6.25*heightInputText -5*age - 78)*activityLevelInputText+500;
+            }
+          }
+          calculatedCalories.toFixed(0);
+        }
+      return calculatedCalories;
+    }
 
     var editingAge = false;
+    const editingSex = 0;
+    const editingHeight = 0;
+    const editingWeight = 0;
     console.log(editingAge);
+
+    const arr = [0, 0, 0, 0]
 
     const toggleEdit = (number, e) => {
       e.preventDefault();
@@ -194,27 +202,27 @@ const Profile = () => {
         </div>
 
         <div class={styles.profileforms}>
-          Your name: {name}<button class={styles.editButton} onClick={e=>toggleEdit(7, e)}>Edit</button>
+          Your name: {name}<button class={styles.editButton} id="nameBtn" onClick={e=>toggleEdit(7, e)}>Edit</button>
             {editbool[7] ? (<form onSubmit={submitName}>
-               <input onChange={e =>setNameInputText(e.target.value)} 
+               <input id="nameInput" onChange={e =>setNameInputText(e.target.value)} 
                value={nameInputText}/>
-               <button type ="submit">Update</button><br/></form>) : <></>}
+               <button type ="submit" id ="nameBtnSubmit">Update</button><br/></form>) : <></>}
             </div>
 
         <div class={styles.profileforms}>
-          Your birthdate: {birthdate}<button class={styles.editButton} onClick={e=>toggleEdit(1, e)}>Edit</button>
+          Your birthdate: {birthdate}<button class={styles.editButton} id="bdayBtn" onClick={e=>toggleEdit(1, e)}>Edit</button>
             {editbool[1] ? (<form onSubmit={submitBirthdate}>
-               <input onChange={e =>setBirthdateInputText(e.target.value)} 
+               <input id ="bdayInput" onChange={e =>setBirthdateInputText(e.target.value)} 
                value={birthdateInputText} pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"/>
-               <button type ="submit">Update</button><br/></form>) : <></>}
+               <button id ="bdayBtnSubmit" type ="submit">Update</button><br/></form>) : <></>}
             </div>
 
        <div class={styles.profileforms}>
-          Your height: {height === "none" ? "none" : <>{height} cm</> }<button class={styles.editButton}onClick={e=>toggleEdit(2, e)}>Edit</button>
+          Your height: {height == "none" ? "none" : <>{height} cm</> }<button class={styles.editButton} id ="heightBtn" onClick={e=>toggleEdit(2, e)}>Edit</button>
             {editbool[2] ? (<form onSubmit={submitHeight}>
-               <input onChange={e =>setHeightInputText(e.target.value)} 
+               <input id ="heightInput" onChange={e =>setHeightInputText(e.target.value)} 
                value={heightInputText} placeholder="   cm"/>
-               <button type ="submit">Update</button><br/></form>) : <></>}
+               <button id ="heightBtnSubmit" type ="submit">Update</button><br/></form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
@@ -230,11 +238,11 @@ const Profile = () => {
             </div>
 
             <div class={styles.profileforms}>
-          Your weight: {weight}<button class={styles.editButton} onClick={e=>toggleEdit(4, e)}>Edit</button>
+          Your weight: {weight}<button class={styles.editButton} id="weightBtn" onClick={e=>toggleEdit(4, e)}>Edit</button>
             {editbool[4] ? (<form onSubmit={submitWeight}>
-               <input onChange={e =>setWeightInputText(e.target.value)} 
+               <input id="weightInput" onChange={e =>setWeightInputText(e.target.value)} 
                value={weightInputText} placeholder="   kg"/>
-               <button type ="submit">Update</button><br/></form>) : <></>}
+               <button id="weightBtnSubmit" type ="submit">Update</button><br/></form>) : <></>}
             </div>
 
             <div class={styles.profileforms}>
@@ -265,7 +273,7 @@ const Profile = () => {
                 </form>) : <></>}
             </div>  <p/><br/>
             <div class={styles.BMR}>
-            Your BMR (basal metabolic rate): {suggestedCalories === "none" ? ("not enough profile info to calculate") : (<>{suggestedCalories}</>)}
+            Your BMR (basal metabolic rate): {calculate().toFixed(0) == 0 ? ("not enough profile info to calculate") : (<>{calculate().toFixed(0)}</>)}
             <p/>The BMR is calculated from the Mifflin St-Jeor formula.
             
             </div>
