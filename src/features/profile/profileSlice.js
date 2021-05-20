@@ -33,11 +33,7 @@ export const profileSlice = createSlice({
       const month = date.getMonth();
       const year = date.getFullYear();
       const day = date.getDate();
-      //Kan man uppdatera databasen direkt härifrån?
-      //Dagen kommer finnas för den kommer hämtas från Firebase när man loggar in. 
-      //Den ska skapas om den inte finns, och weight ska uppdateras från gårdagens till current.
-      //Men det kommer bli svårt eller omöjligt att redigera tidigare weight entries
-      //Det kanske man kan ha som en would.
+
       state.weight = action.payload;
     },
     addBirthdate: (state, action) => {
@@ -65,28 +61,6 @@ export const profileSlice = createSlice({
       console.log("dispatch " + state.suggestedCalories)
       state.suggestedCalories = action.payload;
       console.log("dispatch " + state.suggestedCalories)
-     /* if (state.birthdate == "none" || state.height == "none" || state.sex == "none" ) {
-        state.BMR = "none"
-        console.log("this triggered")
-      } else {
-        const date = new Date();
-        const month = date.getMonth();
-        const year = date.getFullYear();
-        const day = date.getDate();
-        console.log("YEar is " + year)
-        const split = state.birthdate.split("-");
-        const birthyear = split[0];
-        const age = year - birthyear;
-        console.log("Age is" + age) 
-        if (state.sex == "female") {
-          state.suggestedCalories = (10*state.weight + 6.25*state.height -5*age - 161)*state.activityLevel;
-          console.log("triggered female")
-        } else if (state.sex == "male") {
-
-        } else if (state.sex == "other") {
-
-        }
-      }*/
     },
   }
 });
@@ -112,11 +86,3 @@ export const selectSuggestedCalories = (state) => state.profile.suggestedCalorie
 
 
 export default profileSlice.reducer;
-
-/* add to Login if needed, depends on the structure -- want to decide this until tomorrow
-                firebase.database().ref().child("users/" + result.user.uid + "/age/").set("none");
-                firebase.database().ref().child("users/" + result.user.uid + "/height/").set("none");
-                firebase.database().ref().child("users/" + result.user.uid + "/sex/").set("none");
-                firebase.database().ref().child("users/" + result.user.uid + "/activityLevel/").set("none");
-                firebase.database().ref().child("users/" + result.user.uid + "/weight/" + datum).set("none");
-                firebase.database().ref().child("users/" + result.user.uid + "/goal/").set("none"); */
